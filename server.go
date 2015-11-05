@@ -7,30 +7,23 @@ import (
 	mw "github.com/labstack/echo/middleware"
 	"github.com/thoas/stats"
 
-	// Utility routines for talking to SQLServer
-	"github.com/steveoc64/itrak/mssql"
+	pgsql "github.com/steveoc64/itrak.mmaint/pgsql"
 
-	//	"database/sql"
 	"encoding/json"
 	"flag"
 	"fmt"
-	//	_ "github.com/denisenkom/go-mssqldb"
 	"log"
 	"os"
-	//"time"
 )
 
 // Runtime variables, held in external file config.json
-type itrakConfig struct {
+type itrakMMaintConfig struct {
 	Debug     bool
 	SQLServer string
-	SQLPort   int
 	WebPort   int
-	User      string
-	Password  string
 }
 
-var itrak itrakConfig
+var itrak itrakMMaintConfig
 
 // Load the config.json file, and override with runtime flags
 func loadConfig() {
@@ -46,16 +39,12 @@ func loadConfig() {
 
 	flag.BoolVar(&itrak.Debug, "debug", itrak.Debug, "Enable Debugging")
 	flag.StringVar(&itrak.SQLServer, "sqlserver", itrak.SQLServer, "Name of SQLServer")
-	flag.IntVar(&itrak.SQLPort, "sqlport", itrak.SQLPort, "Port Number for SQLServer")
-	flag.StringVar(&itrak.User, "user", itrak.User, "Username for SQLServer")
-	flag.StringVar(&itrak.Password, "password", itrak.Password, "Password for SQLServer")
 	flag.IntVar(&itrak.WebPort, "webport", itrak.WebPort, "Port Number for Web Server")
 	flag.Parse()
 
-	log.Printf("Starting\n\tDebug: \t\t%t\n\tSQLServer: \t%s:%d\n\tSQLUser: \t%s [%s]\n\tWeb Port: \t%d\n",
+	log.Printf("Starting\n\tDebug: \t\t%t\n\tSQLServer: \t%s\n\tWeb Port: \t%d\n",
 		itrak.Debug,
-		itrak.SQLServer, itrak.SQLPort,
-		itrak.User, itrak.Password,
+		itrak.SQLServer,
 		itrak.WebPort)
 }
 
@@ -79,26 +68,17 @@ func main() {
 	e.Get("/stats", func(c *echo.Context) error {
 		return c.JSON(http.StatusOK, s.Data())
 	})
-	e.Get("/skills", func(c *echo.Context) error {
-		res, _ := mssql.Query("select * from SBSiTrak.dbo.DR_SkillLevels")
-		return c.JSON(http.StatusOK, res)
-	})
-	e.Get("/countries", func(c *echo.Context) error {
-		res, _ := mssql.Query("exec SBSiTrak.dbo.CTY_GetCountries")
-		return c.JSON(http.StatusOK, res)
-
-	})
 
 	// Connect to the SQLServer
-	mssql.SetDebug(itrak.Debug)
-	err := mssql.Dial(itrak.SQLServer, itrak.SQLPort, itrak.User, itrak.Password)
-	defer mssql.Close()
+	pgsql.SetDebug(itrak.Debug)
+	err := pgsql.Dial(itrak.SQLServer)
+	defer pgsql.Close()
 	if err != nil {
 		log.Fatalln("Exiting ..")
 	}
 
 	if itrak.Debug {
-		log.Println("Starting Web Server ...")
+		log.Printf("Starting Web Server of port %d ...", itrak.WebPort)
 	}
 	e.Run(fmt.Sprintf(":%d", itrak.WebPort))
 }
