@@ -5,6 +5,7 @@ import (
 	"fmt"
 	_ "github.com/lib/pq"
 	"log"
+	"time"
 )
 
 var db *sql.DB
@@ -81,6 +82,7 @@ func Query(cmd string, args ...interface{}) (*QueryResult, error) {
 		retval.Columns = append(retval.Columns, cols[i])
 	}
 
+	var i = 0
 	for rows.Next() {
 		err = rows.Scan(vals...)
 		if err != nil {
@@ -91,13 +93,34 @@ func Query(cmd string, args ...interface{}) (*QueryResult, error) {
 		// Extract the Values into a row
 		fields := make([]interface{}, len(cols))
 		for i := 0; i < len(fields); i++ {
-			fields[i] = *vals[i].(*interface{})
+			printValue(vals[i].(*interface{}))
+			fields[i] = vals[i].(*interface{})
 		}
 		retval.Rows = append(retval.Rows, fields)
+		log.Println("Row", i)
 	}
 
 	if rows.Err() != nil {
-		return &retval, rows.Err()
+		return retval, rows.Err()
 	}
-	return &retval, nil
+	return retval, nil
+}
+
+func printValue(pval *interface{}) {
+	switch v := (*pval).(type) {
+	case nil:
+		fmt.Print("NULL")
+	case bool:
+		if v {
+			fmt.Print("1")
+		} else {
+			fmt.Print("0")
+		}
+	case []byte:
+		fmt.Print(string(v))
+	case time.Time:
+		fmt.Print(v.Format("2006-01-02 15:04:05.999"))
+	default:
+		fmt.Print(v)
+	}
 }

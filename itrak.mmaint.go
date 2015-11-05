@@ -76,6 +76,11 @@ func main() {
 		res, _ := pgsql.Query("select * from fm_equipment order by name")
 		return c.JSON(http.StatusOK, res)
 	})
+	e.Get("/part", func(c *echo.Context) error {
+		res, _ := pgsql.Query("select array_to_json(array_agg(fm_part)) from fm_part")
+		log.Println("Result = ", res)
+		return c.JSON(http.StatusOK, res)
+	})
 
 	// Connect to the SQLServer
 	pgsql.SetDebug(itrak.Debug)
