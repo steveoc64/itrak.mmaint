@@ -68,6 +68,10 @@ func main() {
 	e.Get("/stats", func(c *echo.Context) error {
 		return c.JSON(http.StatusOK, s.Data())
 	})
+	e.Get("test1", func(c *echo.Context) error {
+		res, _ := pgsql.Query("select * from test1")
+		return c.JSON(http.StatusOK, res)
+	})
 
 	// Connect to the SQLServer
 	pgsql.SetDebug(itrak.Debug)
