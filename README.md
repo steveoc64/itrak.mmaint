@@ -7,7 +7,7 @@ System for managing maintenance activities on machines in the manufacturing plan
 
 ## SQL Database
 
-- 
+- Any database that has a go/SQL driver  will work
 - Holds stored procedures / business logic for interfacing with that data
 
 ## WebApp
