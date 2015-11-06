@@ -10,6 +10,13 @@
     'foundation.dynamicRouting',
     'foundation.dynamicRouting.animations'
   ])
+    .controller('loginCtrl', function($scope,$state,$rootScope){
+
+      $scope.login = function() {
+        $rootScope.loggedIn = true
+        $state.go('home')
+      }
+    })
     .config(config)
     .run(run)
   ;
