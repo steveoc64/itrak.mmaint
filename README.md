@@ -47,3 +47,4 @@ System for managing maintenance activities on machines in the manufacturing plan
 
 - Lightweight server (golang) to provide REST services to the SPA
 - Runs a watcher task to generate escalation events
+- Uses eternal service to broadcast SMS alerts
