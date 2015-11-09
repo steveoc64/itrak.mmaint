@@ -13,7 +13,7 @@
 			},
 			logout: function() {
 				loginState.logout()
-				$state.go('/')
+				$state.go("login")
 			}
 		})
 	});

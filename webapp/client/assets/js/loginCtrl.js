@@ -8,7 +8,7 @@
 
     angular.extend($scope, {
       login: function() {
-        console.log("Calling the login function")
+        console.log("Calling the login function",$scope.username,$scope.password)
         loginState.login()
         $state.go('home')
       }
