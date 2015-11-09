@@ -5,6 +5,7 @@
   angular.module('itrak', [
     'ui.router',
     'ngAnimate',
+    'ngResource',
 
     //foundation
     'foundation',
