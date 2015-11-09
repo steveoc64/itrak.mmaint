@@ -4,9 +4,9 @@
 
 	console.log('Loading mainPageCtrl')
 
-	angular.module('itrak').controller('mainPageCtrl', function($scope,$state,loginState){
+	angular.module('itrak').controller('mainPageCtrl', function($state,loginState){
 
-		angular.extend($scope, {
+		angular.extend(this, {
 			loginState: loginState,
 			isLoggedIn: function() {
 				return loginState.loggedIn

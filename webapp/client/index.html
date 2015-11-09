@@ -3,14 +3,14 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>iTrak Machine Maintenace</title>
+    <title>iTrak Maintenace</title>
     <link href="./assets/css/app.css" rel="stylesheet" type="text/css">
     <script src="./assets/js/foundation.js"></script>
     <script src="./assets/js/templates.js"></script>
     <script src="./assets/js/routes.js"></script>
     <script src="./assets/js/app.js"></script>
   </head>
-  <body ng-controller="mainPageCtrl">
+  <body ng-controller="mainPageCtrl as m">
     <div class="grid-frame vertical">
       <div class="grid-content shrink" style="padding: 0;">
 
@@ -18,12 +18,12 @@
           <div class="menu-group-left">
             <ul class="primary condense menu-bar">
               <li><a><img src="assets/img/supaloc-logo-white.png" style="width:120px" alt="Supaloc logo"></a></li>
-              <li><a><strong>iTrak Machine Maintenance</strong></a></li>
+              <li><a><strong>iTrak Maintenance</strong></a></li>
             </ul>           
           </div>
-          <div class="menu-group-right" ng-if="isLoggedIn()">
+          <div class="menu-group-right" ng-if="m.isLoggedIn()">
             <ul class="menu-bar primary">
-              <li><a ng-click="logout()">Logout</a></li>         
+              <li><a ng-click="m.logout()">Logout</a></li>         
             </ul>            
           </div>
         </div>

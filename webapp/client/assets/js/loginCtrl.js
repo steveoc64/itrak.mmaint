@@ -12,7 +12,6 @@
         console.log(this)
         console.log("Calling the login function",this.username,this.password)
         loginState.login(this.username, this.passwd)
-        $state.go('home')
     }
 
     angular.extend(this, {

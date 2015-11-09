@@ -4,7 +4,10 @@ import (
 	"database/sql"
 	"fmt"
 	"github.com/labstack/echo"
+	mw "github.com/labstack/echo/middleware"
 	_ "github.com/lib/pq"
+	"github.com/rs/cors"
+	"github.com/thoas/stats"
 	"log"
 )
 
@@ -26,6 +29,15 @@ func main() {
 
 	// Setup the web server
 	e := echo.New()
+
+	e.Use(mw.Logger())
+	e.Use(mw.Recover())
+	e.Use(mw.Gzip())
+	e.Use(cors.Default().Handler)
+
+	server_stats = stats.New()
+	e.Use(server_stats.Handler)
+
 	loadHandlers(e)
 
 	// Start the web server

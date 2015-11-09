@@ -2,11 +2,8 @@ package main
 
 import (
 	"github.com/labstack/echo"
-	mw "github.com/labstack/echo/middleware"
-	"github.com/rs/cors"
 	"github.com/thoas/stats"
 
-	"log"
 	"net/http"
 )
 
@@ -14,24 +11,16 @@ var server_stats *stats.Stats
 
 func loadHandlers(e *echo.Echo) {
 
-	// Setup the web server
-
-	e.Use(mw.Logger())
-	e.Use(mw.Recover())
-	e.Use(cors.Default().Handler)
-
-	log.Println(cors.Default())
-	server_stats = stats.New()
-	e.Use(server_stats.Handler)
-
 	// Expose some Routes for testing
-	e.Index("public/index.html")
+	e.Index("index.html")
+	e.ServeDir("/", "./webapp/build/")
 	e.Get("/stats", getStats)
 	e.Get("/test1", getTestData)
 	e.Get("/equipment", getEquipment)
 	e.Get("/part", getPartsList)
 	e.Get("/task", getTaskList)
 	e.Get("/jtask", getJTaskList)
+	e.Put("/login", login)
 
 }
 
@@ -62,4 +51,8 @@ func getTaskList(c *echo.Context) error {
 func getJTaskList(c *echo.Context) error {
 	res, _ := SQLJMap(db, "select lineno,instructions from fm_task order by lineno limit 300")
 	return c.JSON(http.StatusOK, res)
+}
+
+func login(c *echo.Context) error {
+	return c.String(http.StatusOK, "welcome aboard")
 }

@@ -4,7 +4,7 @@
 
 	console.log("Loading LoginState")
 
-	angular.module('itrak').service('loginState', function($http){
+	angular.module('itrak').service('loginState', function($state,$http){
 		angular.extend(this, {
 			loggedIn: false,
 			toggle: function() {
@@ -16,7 +16,9 @@
 					username,
 					passwd)
 
-				$http.put('http://localhost:8082/login', {u: username, p: passwd})
+				$http.put('http://localhost:8081/login', {u: username, p: passwd})
+				this.loggedIn = true
+		        $state.go('home')
 			},
 			logout: function() {
 				this.loggedIn = false
