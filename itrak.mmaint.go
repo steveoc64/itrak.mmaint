@@ -4,14 +4,11 @@ import (
 	"database/sql"
 	"fmt"
 	"github.com/labstack/echo"
-	mw "github.com/labstack/echo/middleware"
 	_ "github.com/lib/pq"
-	"github.com/thoas/stats"
 	"log"
 )
 
 var db *sql.DB
-var server_stats *stats.Stats
 
 // Run the MicroServer
 func main() {
@@ -28,11 +25,7 @@ func main() {
 	}
 
 	// Setup the web server
-	server_stats = stats.New()
 	e := echo.New()
-	e.Use(mw.Logger())
-	e.Use(mw.Recover())
-	e.Use(server_stats.Handler)
 	loadHandlers(e)
 
 	// Start the web server

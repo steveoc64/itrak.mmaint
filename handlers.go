@@ -2,11 +2,26 @@ package main
 
 import (
 	"github.com/labstack/echo"
+	mw "github.com/labstack/echo/middleware"
+	"github.com/rs/cors"
+	"github.com/thoas/stats"
 
 	"net/http"
 )
 
+var server_stats *stats.Stats
+
 func loadHandlers(e *echo.Echo) {
+
+	// Setup the web server
+
+	e.Use(mw.Logger())
+	e.Use(mw.Recover())
+	e.Use(cors.Default().Handler)
+
+	server_stats = stats.New()
+	e.Use(server_stats.Handler)
+
 	// Expose some Routes for testing
 	e.Index("public/index.html")
 	e.Get("/stats", getStats)
@@ -15,6 +30,7 @@ func loadHandlers(e *echo.Echo) {
 	e.Get("/part", getPartsList)
 	e.Get("/task", getTaskList)
 	e.Get("/jtask", getJTaskList)
+
 }
 
 func getStats(c *echo.Context) error {
