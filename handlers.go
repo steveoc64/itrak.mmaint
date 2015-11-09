@@ -4,6 +4,7 @@ import (
 	"github.com/labstack/echo"
 	"github.com/thoas/stats"
 
+	"log"
 	"net/http"
 )
 
@@ -20,7 +21,7 @@ func loadHandlers(e *echo.Echo) {
 	e.Get("/part", getPartsList)
 	e.Get("/task", getTaskList)
 	e.Get("/jtask", getJTaskList)
-	e.Put("/login", login)
+	e.Post("/login", login)
 
 }
 
@@ -53,6 +54,22 @@ func getJTaskList(c *echo.Context) error {
 	return c.JSON(http.StatusOK, res)
 }
 
+type loginCreds struct {
+	U string
+	P string
+}
+
 func login(c *echo.Context) error {
-	return c.String(http.StatusOK, "welcome aboard")
+	var l loginCreds
+	c.Bind(&l)
+	log.Println(l)
+	res, _ := SQLMap(db, "select username from users where username=$1 and passwd=$2",
+		l.U,
+		l.P)
+	log.Println(res)
+	if len(res) == 1 {
+		return c.String(http.StatusOK, "welcome aboard")
+	} else {
+		return c.String(http.StatusNotFound, "login failed")
+	}
 }

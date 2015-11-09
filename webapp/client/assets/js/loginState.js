@@ -7,6 +7,7 @@
 	angular.module('itrak').service('loginState', function($state,$http){
 		angular.extend(this, {
 			loggedIn: false,
+			username: '',
 			toggle: function() {
 				this.loggedIn = !this.loggedIn
 				console.log("Login state toggled to", this.loggedIn)
@@ -16,9 +17,17 @@
 					username,
 					passwd)
 
-				$http.put('http://localhost:8081/login', {u: username, p: passwd})
-				this.loggedIn = true
-		        $state.go('home')
+				var vm = this
+				$http.post('http://localhost:8081/login', 
+					{u: username, p: passwd})
+					.then(function(){
+						alert('logged in OK')
+						vm.loggedIn = true
+						vm.username = username
+				        $state.go('home')
+					},function(){
+						alert('failed to login')
+					})
 			},
 			logout: function() {
 				this.loggedIn = false
