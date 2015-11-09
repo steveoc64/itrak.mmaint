@@ -33,13 +33,7 @@ func main() {
 	e.Use(mw.Logger())
 	e.Use(mw.Recover())
 	e.Use(server_stats.Handler)
-
-	// Expose some Routes for testing
-	e.Index("public/index.html")
-	e.Get("/stats", getStats)
-	e.Get("/test1", getTestData)
-	e.Get("/equipment", getEquipment)
-	e.Get("/part", getPartsList)
+	loadHandlers(e)
 
 	// Start the web server
 	if itrak.Debug {
