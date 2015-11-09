@@ -43,3 +43,5 @@ Temporary Items
 .apdisk
 config.json
 itrak.mmaint.exe
+*.exe~
+*.glue
