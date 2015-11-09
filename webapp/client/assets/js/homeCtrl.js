@@ -4,13 +4,13 @@
 
 	console.log('Loading homeCtrl')
 
-	angular.module('itrak').controller('homeCtrl', function($scope,$state,loginState){
+	angular.module('itrak').controller('homeCtrl', function($state,loginState){
 
 		if (!loginState.loggedIn) {
 			$state.go('login')
 		}
 
-		angular.extend($scope, {
+		angular.extend(this, {
 			loginState: loginState,
 		})
 	});

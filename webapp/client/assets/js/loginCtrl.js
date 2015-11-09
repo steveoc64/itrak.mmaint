@@ -4,15 +4,21 @@
 
   console.log('loading loginCtrl')
 
-  angular.module('itrak').controller('loginCtrl', function($scope, $state, loginState){     
+  angular.module('itrak').controller('loginCtrl', function($state, loginState){     
 
-    angular.extend($scope, {
-      login: function() {
-        console.log("Calling the login function",$scope.username,$scope.password)
-        loginState.login()
+    this.login = login
+    
+    function login() {
+        console.log(this)
+        console.log("Calling the login function",this.username,this.password)
+        loginState.login(this.username, this.passwd)
         $state.go('home')
-      }
-    })  
+    }
+
+    angular.extend(this, {
+      username: '',
+      passwd: ''
+      })
   });
 
 })();

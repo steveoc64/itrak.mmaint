@@ -1,8 +1,7 @@
 ---
 name: login
 url: /
-controller: loginCtrl
-animationIn: slideInDown
+controller: "loginCtrl as l"
 ---
 
 <div class="grid-container">
@@ -13,15 +12,15 @@ animationIn: slideInDown
 	  <div class="login-box">
 	  <div class="row">
 	  <div class="large-12 columns">
-	  <form ng-submit="login()">
+	  <form ng-submit="l.login()" method="POST">
 	       <div class="row">
 	         <div class="large-12 columns">
-	             <input type="text" name="username" ng-model="username" placeholder="Username" />
+	             <input type="text" name="username" ng-model="l.username" placeholder="Username" />
 	         </div>
 	       </div>
 	      <div class="row">
 	         <div class="large-12 columns">
-	             <input type="password" name="password" ng-model="password" placeholder="Password" />
+	             <input type="password" name="password" ng-model="l.password" placeholder="Password" />
 	         </div>
 	      </div>
 	      <div class="row">
