@@ -6,6 +6,7 @@ import (
 	"github.com/rs/cors"
 	"github.com/thoas/stats"
 
+	"log"
 	"net/http"
 )
 
@@ -19,6 +20,7 @@ func loadHandlers(e *echo.Echo) {
 	e.Use(mw.Recover())
 	e.Use(cors.Default().Handler)
 
+	log.Println(cors.Default())
 	server_stats = stats.New()
 	e.Use(server_stats.Handler)
 
