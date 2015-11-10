@@ -45,3 +45,5 @@ config.json
 itrak.mmaint.exe
 *.exe~
 *.glue
+*.rsa
+keys/app.rsa.pub

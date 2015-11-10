@@ -14,7 +14,7 @@
   )
 
   // List of Roles that users can belong to
-  angular.module('itrak').constant('UserRoles',['Worker' ,'Vendor','SiteMgr','Admin'])
+  angular.module('itrak').constant('UserRoles',['Worker','Vendor','SiteMgr','Admin'])
 
   // Service for tracking the Login State
   angular.module('itrak').service('loginState', function($state,$http,UserRoles,LoginServer){
@@ -33,7 +33,6 @@
           username: username, 
           password: passwd
         },function(retval,r){
-          console.log("retval",retval,"r",r)
           vm.loggedIn = true
           vm.username = retval.Username
           vm.role = retval.Role
