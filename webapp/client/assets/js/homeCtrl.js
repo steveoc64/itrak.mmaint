@@ -2,7 +2,7 @@
 	// homeCtrl
 	'use strict';
 
-	console.log('Loading homeCtrl')
+	console.log('Loading Home Controller')
 
 	angular.module('itrak').controller('homeCtrl', function($state,loginState){
 

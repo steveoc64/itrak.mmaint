@@ -2,7 +2,7 @@
 	// mainPageCtrl
 	'use strict';
 
-	console.log('Loading mainPageCtrl')
+	console.log('Loading MainPage Controller')
 
 	angular.module('itrak').controller('mainPageCtrl', function($state,loginState){
 

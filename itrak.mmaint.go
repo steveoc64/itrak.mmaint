@@ -7,7 +7,6 @@ import (
 	mw "github.com/labstack/echo/middleware"
 	_ "github.com/lib/pq"
 	"github.com/rs/cors"
-	"github.com/thoas/stats"
 	"log"
 )
 
@@ -33,10 +32,14 @@ func main() {
 	e.Use(mw.Logger())
 	e.Use(mw.Recover())
 	e.Use(mw.Gzip())
-	e.Use(cors.Default().Handler)
 
-	server_stats = stats.New()
-	e.Use(server_stats.Handler)
+	c := cors.New(cors.Options{
+		AllowedOrigins:   []string{"*"},
+		AllowedMethods:   []string{"GET", "POST", "DELETE", "PUT", "PATCH"},
+		AllowCredentials: true,
+		Debug:            true,
+	})
+	e.Use(c.Handler)
 
 	loadHandlers(e)
 

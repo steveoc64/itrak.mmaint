@@ -1,4 +1,4 @@
-(function() {
+;(function() {
   // app.js
   'use strict';
 
@@ -15,6 +15,8 @@
     .config(config)
     .run(run)
   ;
+
+  angular.module('itrak').constant('ServerName', 'http://localhost:8082')
 
   config.$inject = ['$urlRouterProvider', '$locationProvider'];
 

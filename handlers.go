@@ -12,9 +12,15 @@ var server_stats *stats.Stats
 
 func loadHandlers(e *echo.Echo) {
 
-	// Expose some Routes for testing
-	e.Index("index.html")
+	e.SetDebug(true)
+
+	// Point to the client application generated inside the webapp dir
+	e.Index("./webapp/build/index.html")
 	e.ServeDir("/", "./webapp/build/")
+
+	server_stats = stats.New()
+	e.Use(server_stats.Handler)
+
 	e.Get("/stats", getStats)
 	e.Get("/test1", getTestData)
 	e.Get("/equipment", getEquipment)
@@ -22,7 +28,7 @@ func loadHandlers(e *echo.Echo) {
 	e.Get("/task", getTaskList)
 	e.Get("/jtask", getJTaskList)
 	e.Post("/login", login)
-
+	e.Delete("/login", logout)
 }
 
 func getStats(c *echo.Context) error {
@@ -55,21 +61,41 @@ func getJTaskList(c *echo.Context) error {
 }
 
 type loginCreds struct {
-	U string
-	P string
+	Username string
+	Password string
+}
+
+type loginResponse struct {
+	Username string
+	Role     string
+	Token    string
 }
 
 func login(c *echo.Context) error {
-	var l loginCreds
-	c.Bind(&l)
-	log.Println(l)
-	res, _ := SQLMap(db, "select username from users where username=$1 and passwd=$2",
-		l.U,
-		l.P)
-	log.Println(res)
-	if len(res) == 1 {
-		return c.String(http.StatusOK, "welcome aboard")
-	} else {
-		return c.String(http.StatusNotFound, "login failed")
+	l := new(loginCreds)
+	err := c.Bind(&l)
+	if err != nil {
+		log.Println("Bind Error:", err.Error())
 	}
+	log.Println("Login Credentials", l)
+
+	sqlResult, _ := SQLMap(db, "select username from users where username=$1 and passwd=$2",
+		l.Username,
+		l.Password)
+	log.Println("SQLResult", sqlResult)
+
+	if len(sqlResult) == 1 {
+		r := new(loginResponse)
+		r.Username = l.Username
+		r.Role = "Worker"
+		r.Token = "98023840238402840"
+		return c.JSON(http.StatusOK, r)
+	} else {
+		return c.String(http.StatusNotFound, "invalid")
+	}
+}
+
+func logout(c *echo.Context) error {
+	log.Println("Logging out ...")
+	return c.String(http.StatusOK, "bye")
 }
