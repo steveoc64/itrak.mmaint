@@ -38,7 +38,24 @@
           vm.role = retval.Role
           vm.token = retval.Token
           console.log('Success',vm)
-          $state.go("home")
+
+          switch (vm.role) {
+            case 'Worker':
+              $state.go("worker")
+              break
+            case 'Vendor':
+              $state.go("vendor")
+              break
+            case 'SiteMgr':
+              $state.go("sitemgr")
+              break
+            case 'Admin':
+              $state.go("admin")
+              break
+            default:
+              $state.go("home")
+              break
+          }
         },function(){
           console.log('Login Failed')
         })
