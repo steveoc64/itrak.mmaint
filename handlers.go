@@ -10,6 +10,9 @@ import (
 
 var server_stats *stats.Stats
 
+/////////////////////////////////////////////////////////////////////////////////////////////////
+// Add Handlers to the web server
+
 func loadHandlers(e *echo.Echo) {
 
 	e.SetDebug(true)
@@ -27,9 +30,13 @@ func loadHandlers(e *echo.Echo) {
 	e.Get("/part", getPartsList)
 	e.Get("/task", getTaskList)
 	e.Get("/jtask", getJTaskList)
+
 	e.Post("/login", login)
 	e.Delete("/login", logout)
 }
+
+/////////////////////////////////////////////////////////////////////////////////////////////////
+// Some simple test case handlers
 
 func getStats(c *echo.Context) error {
 	return c.JSON(http.StatusOK, server_stats.Data())
@@ -60,6 +67,9 @@ func getJTaskList(c *echo.Context) error {
 	return c.JSON(http.StatusOK, res)
 }
 
+/////////////////////////////////////////////////////////////////////////////////////////////////
+// Logic for handling logins
+
 type loginCreds struct {
 	Username string
 	Password string
@@ -79,7 +89,7 @@ func login(c *echo.Context) error {
 	}
 	log.Println("Login Credentials", l)
 
-	sqlResult, _ := SQLMap(db, "select username from users where username=$1 and passwd=$2",
+	sqlResult, _ := SQLMap(db, "select username,role from users where username=$1 and passwd=$2",
 		l.Username,
 		l.Password)
 	log.Println("SQLResult", sqlResult)
@@ -87,11 +97,11 @@ func login(c *echo.Context) error {
 	if len(sqlResult) == 1 {
 		r := new(loginResponse)
 		r.Username = l.Username
-		r.Role = "Worker"
+		r.Role = sqlResult[0]["role"]
 		r.Token = "98023840238402840"
 		return c.JSON(http.StatusOK, r)
 	} else {
-		return c.String(http.StatusNotFound, "invalid")
+		return c.String(http.StatusUnauthorized, "invalid")
 	}
 }
 
@@ -99,3 +109,6 @@ func logout(c *echo.Context) error {
 	log.Println("Logging out ...")
 	return c.String(http.StatusOK, "bye")
 }
+
+/////////////////////////////////////////////////////////////////////////////////////////////////
+// Logic for handling logins
