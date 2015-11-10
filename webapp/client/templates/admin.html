@@ -1,50 +1,66 @@
 ---
 name: admin
 url: /admin
-controller: "adminCtrl as ad"
+controller: "adminCtrl as ac"
 animationIn: slideInLeft
 ---
 
-<div class="grid-container">
-  <h1>Administrator</h1>
+<h1>Administrator</h1>
 
-  <div class="card primary">
-  	<img src="assets/img/people.jpg" alt="People">
-  	<div class="card-divider">People</div>
-  	<div class="card-section">
-  		Workers, Managers and Vendors.
-  	</div>
-  </div>
+<ul class="small-block-grid-2">
+  <li>
+    <div class="card primary" ng-click="ac.people()">
+      <img src="assets/img/people.jpg" alt="People">
+      <div class="card-divider">People</div>
+      <div class="card-section show-for-medium-up">
+        Workers, Managers and Vendors.
+      </div>
+    </div>
+  </li>
+  <li>
+    <div class="card primary" ng-click="ac.site()">
+      <img src="assets/img/site.jpg" alt="Sites">
+      <div class="card-divider">Sites</div>
+      <div class="card-section show-for-medium-up">
+        Factory Sites
+      </div>
+    </div>
+  </li>
+  <li>
+    <div class="card primary" ng-click="ac.equipment()">
+      <img src="assets/img/equipment.gif" alt="Equipment">
+      <div class="card-divider">Equipment</div>
+      <div class="card-section show-for-medium-up">
+        Factory Equipment
+      </div>
+    </div>   
+  </li>
+  <li>
+    <div class="card primary" ng-click="ac.workorder()">
+      <img src="assets/img/workorder.jpg" alt="Work Orders">
+      <div class="card-divider">Work Orders</div>
+      <div class="card-section show-for-medium-up">
+        Work Orders
+      </div>
+    </div>
+  </li>
+  <li>  
+    <div class="card primary" ng-click="ac.task()">
+      <img src="assets/img/task.jpg" alt="Tasks">
+      <div class="card-divider">Tasks</div>
+      <div class="card-section show-for-medium-up">
+        A WorkOrder broken down into Tasks
+      </div>
+    </div>
+  </li>
+  <li>
+    <div class="card primary">
+      <img src="assets/img/task.jpg" alt="Tasks">
+      <div class="card-divider">Tasks</div>
+      <div class="card-section show-for-medium-up">
+        A WorkOrder broken down into Tasks
+      </div>
+    </div>
+  </li>
+</ul>
 
-  <div class="card primary">
-  	<img src="assets/img/site.jpg" alt="Sites">
-  	<div class="card-divider">Sites</div>
-  	<div class="card-section">
-  		Factory Sites
-  	</div>
-  </div>
-
-  <div class="card primary">
-  	<img src="assets/img/equipment.gif" alt="Equipment">
-  	<div class="card-divider">Equipment</div>
-  	<div class="card-section">
-  		Factory Equipment
-  	</div>
-  </div>
-  <div class="card primary">
-  	<img src="assets/img/workorder.jpg" alt="Work Orders">
-  	<div class="card-divider">Work Orders</div>
-  	<div class="card-section">
-  		Work Orders
-  	</div>
-  </div>
-  <div class="card primary">
-  	<img src="assets/img/task.jpg" alt="Tasks">
-  	<div class="card-divider">Tasks</div>
-  	<div class="card-section">
-  		A WorkOrder broken down into Tasks
-  	</div>
-  </div>
-
-
-</div>
