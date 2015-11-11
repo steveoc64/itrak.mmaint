@@ -14,23 +14,24 @@
     <div class="grid-frame vertical">
       <div class="grid-content shrink" style="padding: 0;">
 
-        <div class="menu-group primary">
-          <div class="menu-group-left">
-            <ul class="primary condense menu-bar">
-              <li><a><img src="assets/img/supaloc-logo-white.png" style="width:120px" alt="Supaloc logo"></a></li>
-              <li><a><strong>iTrak CMMS</strong></a></li>
-            </ul>           
-          </div>
-          <div class="menu-group-right" ng-if="m.isLoggedIn()">
-            <ul class="menu-bar primary">
-              <li><a ng-click="m.logout()">Logout</a></li>         
-            </ul>            
-          </div>
+        <div class="title-bar primary">
+
+          <span class="left show-medium-up">
+              <a><img src="assets/img/supaloc-logo-white.png" style="width:120px" alt="Supaloc logo"></a>
+          </span>
+          <span class="title center">
+              <a><strong>iTrak CMMS</strong></a>
+          </span>
+          <span class="right" ng-show="m.isLoggedIn()">
+              <a ng-click="m.home()"><img zf-iconic="" icon="action" size="small">Home</a>
+              <a ng-click="m.logout()">Logout</a>
+          </span>
+          
         </div>
-        
-      </div>
+
       <div ui-view class="grid-content">
       </div>
+
     </div>
   </body>
 </html>

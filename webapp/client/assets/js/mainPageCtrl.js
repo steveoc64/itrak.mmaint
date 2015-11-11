@@ -8,6 +8,11 @@
 
 		angular.extend(this, {
 			loginState: loginState,
+			home: function() {
+				if (loginState.loggedIn && loginState.homePage != '') {
+					$state.go(loginState.homePage)					
+				}
+			},
 			isLoggedIn: function() {
 				return loginState.loggedIn
 			},

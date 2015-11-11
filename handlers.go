@@ -34,7 +34,15 @@ func loadHandlers(e *echo.Echo) {
 	e.Post("/login", login)
 	e.Delete("/login", logout)
 
-	e.Get("/people/:id", people)
+	e.Get("/people", getPeople)
+	e.Post("/people", createPeople)
+	e.Patch("/people/:id", updatePeople)
+	e.Delete("/people/:id", deletePeople)
+
+	e.Get("/site", getSite)
+	e.Post("/site", createSite)
+	e.Patch("/site/:id", updateSite)
+	e.Delete("/site/:id", deleteSite)
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////
@@ -113,4 +121,41 @@ func logout(c *echo.Context) error {
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////
-// Logic for handling logins
+// Logic for handling people requests
+
+func getPeople(c *echo.Context) error {
+	sqlResult, _ := SQLMap(db, "select * from person")
+	return c.JSON(http.StatusOK, sqlResult)
+}
+func createPeople(c *echo.Context) error {
+	sqlResult, _ := SQLMap(db, "select * from person")
+	return c.JSON(http.StatusOK, sqlResult)
+}
+func updatePeople(c *echo.Context) error {
+	sqlResult, _ := SQLMap(db, "select * from person")
+	return c.JSON(http.StatusOK, sqlResult)
+}
+func deletePeople(c *echo.Context) error {
+	sqlResult, _ := SQLMap(db, "select * from person")
+	return c.JSON(http.StatusOK, sqlResult)
+}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////
+// Logic for handling Site requests
+
+func getSite(c *echo.Context) error {
+	sqlResult, _ := SQLMap(db, "select * from site")
+	return c.JSON(http.StatusOK, sqlResult)
+}
+func createSite(c *echo.Context) error {
+	sqlResult, _ := SQLMap(db, "select * from site")
+	return c.JSON(http.StatusOK, sqlResult)
+}
+func updateSite(c *echo.Context) error {
+	sqlResult, _ := SQLMap(db, "select * from site")
+	return c.JSON(http.StatusOK, sqlResult)
+}
+func deleteSite(c *echo.Context) error {
+	sqlResult, _ := SQLMap(db, "select * from site")
+	return c.JSON(http.StatusOK, sqlResult)
+}

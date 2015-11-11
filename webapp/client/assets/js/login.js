@@ -5,7 +5,7 @@
   console.log('Loading Login Controller')
 
   // Remote resource for login / logout transactions
-  angular.module('itrak').factory('LoginServer', function($resource, ServerName){
+  angular.module('itrak').factory('loginServer', function($resource, ServerName){
     return $resource(ServerName+'/login',{},{
         login: {method: 'POST'},
         logout: {method: 'DELETE'}
@@ -17,7 +17,7 @@
   angular.module('itrak').constant('UserRoles',['Worker','Vendor','SiteMgr','Admin'])
 
   // Service for tracking the Login State
-  angular.module('itrak').service('loginState', function($state,$http,UserRoles,LoginServer){
+  angular.module('itrak').service('loginState', function($state,$http,UserRoles,loginServer){
 
     angular.extend(this, {
       
@@ -26,10 +26,11 @@
       username: '',     
       role: '',
       token: '',
+      homePage: '',
 
       login: function(username,passwd) { 
         var vm = this
-        LoginServer.login({
+        loginServer.login({
           username: username, 
           password: passwd
         },function(retval,r){
@@ -41,21 +42,23 @@
 
           switch (vm.role) {
             case '1':
-              $state.go("worker")
+              vm.homePage = 'worker'
               break
             case '3':
-              $state.go("vendor")
+              vm.homePage = 'vendor'
               break
             case '2':
-              $state.go("sitemgr")
+              vm.homePage = 'sitemgr'
               break
             case '100':
-              $state.go("admin")
+              vm.homePage = 'admin'
               break
             default:
-              $state.go("home")
+              vm.homePage = 'home'
               break
           }
+          $state.go(vm.homePage)
+
         },function(){
           console.log('Login Failed')
         })
@@ -66,7 +69,7 @@
         this.username = ''
         this.role = ''
         this.token = ''
-        LoginServer.logout()
+        loginServer.logout()
         console.log("Logged out",this)
       },
     })
