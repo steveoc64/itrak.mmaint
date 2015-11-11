@@ -33,6 +33,8 @@ func loadHandlers(e *echo.Echo) {
 
 	e.Post("/login", login)
 	e.Delete("/login", logout)
+
+	e.Get("/people/:id", people)
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////
