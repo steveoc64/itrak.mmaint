@@ -128,17 +128,15 @@ func main() {
 		} else {
 			siteId := _res[0]["id"]
 			personName := row["personname"]
-			updatedRows, __err := ExecDb(db, "update person set location=$2 where name=$1",
-				personName,
-				siteId)
+			updatedRows, _ := ExecDb(db, "update person set location=$2 where name=$1", personName, siteId)
+			log.Println("Updated", updatedRows, "persons setting location =", siteId, "where name =", personName)
 
-			if __err != nil {
-				log.Fatal(__err.Error())
-			} else {
-				log.Println("Updated", updatedRows, "persons setting location =", siteId, "where name =", personName)
-			}
 		}
 	}
+	ExecDb(db, "update person set location=null where location=0")
+	ExecDb(db, "update person set role=null where role=0")
+	ExecDb(db, "alter table person add foreign key(location) references site")
+	ExecDb(db, "alter table person add foreign key(role) references roles")
 
 	///////////////////////////////////////////////////////////////////////////////////////
 	// Equipment table
@@ -170,6 +168,7 @@ func main() {
 		if len(_res) > 0 {
 			catId, _err = strconv.Atoi(_res[0]["id"])
 		}
+		log.Println("Equip Category = ", catId)
 
 		// get the parentId
 		var parentId int
@@ -185,81 +184,69 @@ func main() {
 
 		// Now get the Vendor
 		vendorId := 0
+		if row["vendor"] != "" {
+			_res, _err = SQLMap(db, "select id from vendor where name=$1", row["vendor"])
+			if _err != nil {
+				log.Fatal(err.Error())
+			}
+			if len(_res) > 0 {
+				vendorId, _err = strconv.Atoi(_res[0]["id"])
+			}
+		}
 
-		updatedRows, _ := ExecDb(db, "update equipment set location=$2,category=$3,vendor=$4,parent_id=$5 where name=$1",
+		updatedRows, _eqErr := ExecDb(db, "update equipment set location=$2,category=$3,vendor=$4,parent_id=$5 where name=$1",
 			row["name"],
 			siteId,
 			catId,
 			vendorId,
 			parentId)
-		ExecDb(db, "update equipment set location=null where location=0")
-		ExecDb(db, "update equipment set category=null where category=0")
-		ExecDb(db, "update equipment set vendor=null where vendor=0")
-		ExecDb(db, "update equipment set parent_id=null where parent_id=0")
+
+		if _eqErr != nil {
+			log.Fatal(_eqErr.Error())
+		}
+
 		log.Println("Updated", updatedRows, "equipments setting location =", siteId,
 			", category =", catId,
 			", vendor =", vendorId,
 			", parent part =", parentId,
 			"where name =", row["name"])
 	}
+	ExecDb(db, "update equipment set location=null where location=0")
+	ExecDb(db, "update equipment set category=null where category=0")
+	ExecDb(db, "update equipment set vendor=null where vendor=0")
+	ExecDb(db, "update equipment set parent_id=null where parent_id=0")
+	ExecDb(db, "alter table equipment add foreign key(location) references site")
+	ExecDb(db, "alter table equipment add foreign key(category) references equip_type")
+	ExecDb(db, "alter table equipment add foreign key(vendor) references vendor")
+	ExecDb(db, "alter table equipment add foreign key(parent_id) references equipment")
 
 	///////////////////////////////////////////////////////////////////////////////////////
 	// Vendor table
 	//		- fix rating
-	sqlResult, _err = SQLMap(db, "select * from fm_equipment")
+	sqlResult, _err = SQLMap(db, "select * from fm_vendor")
 	if _err != nil {
 		log.Println("Error:", _err.Error())
 	}
 	for _, row := range sqlResult {
 		// Lookup the location id
-		_res, _err := SQLMap(db, "select id from site where name=$1", row["location"])
-		if _err != nil {
-			log.Fatal(_err.Error())
-		}
-		var siteId int
-		if len(_res) > 0 {
-			siteId, _err = strconv.Atoi(_res[0]["id"])
-		}
-
-		// now get the category ID
-		var catId int
-		_res, _err = SQLMap(db, "select id from equip_type where name=$1", row["category"])
+		var ratingId int
+		_res, _err := SQLMap(db, "select id from vendor_rating where name=$1", row["vendorrating"])
 		if _err != nil {
 			log.Fatal(_err.Error())
 		}
 		if len(_res) > 0 {
-			catId, _err = strconv.Atoi(_res[0]["id"])
+			ratingId, _err = strconv.Atoi(_res[0]["id"])
 		}
 
-		// get the parentId
-		var parentId int
-		if row["partof"] != "" {
-			_res, _err = SQLMap(db, "select id from equipment where name=$1", row["partof"])
-			if _err != nil {
-				log.Fatal(err.Error())
-			}
-			if len(_res) > 0 {
-				parentId, _err = strconv.Atoi(_res[0]["id"])
-			}
-		}
-
-		// Now get the Vendor
-		vendorId := 0
-
-		updatedRows, _ := ExecDb(db, "update equipment set location=$2,category=$3,vendor=$4,parent_id=$5 where name=$1",
+		updatedRows, _u := ExecDb(db, "update vendor set rating=$2 where name=$1",
 			row["name"],
-			siteId,
-			catId,
-			vendorId,
-			parentId)
-		ExecDb(db, "update equipment set location=null where location=0")
-		ExecDb(db, "update equipment set category=null where category=0")
-		ExecDb(db, "update equipment set vendor=null where vendor=0")
-		ExecDb(db, "update equipment set parent_id=null where parent_id=0")
-		log.Println("Updated", updatedRows, "equipments setting location =", siteId,
-			", category =", catId,
-			", vendor =", vendorId,
-			", parent part =", parentId,
+			ratingId)
+		if _u != nil {
+			log.Fatal(_u.Error())
+		}
+		ExecDb(db, "update vendor set rating=null where rating=0")
+		log.Println("Updated", updatedRows, "vendor setting rating =", ratingId,
 			"where name =", row["name"])
 	}
+	ExecDb(db, "alter table vendor add foreign key(rating) references vendor_rating")
 }
