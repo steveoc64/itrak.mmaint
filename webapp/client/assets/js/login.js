@@ -40,16 +40,16 @@
           console.log('Success',vm)
 
           switch (vm.role) {
-            case 'Worker':
+            case '1':
               $state.go("worker")
               break
-            case 'Vendor':
+            case '3':
               $state.go("vendor")
               break
-            case 'SiteMgr':
+            case '2':
               $state.go("sitemgr")
               break
-            case 'Admin':
+            case '100':
               $state.go("admin")
               break
             default:
