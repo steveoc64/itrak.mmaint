@@ -1,0 +1,15 @@
+---
+name: admin.people
+url: /people
+animationIn: slideInLeft
+---
+
+<div class="grid-container">
+  <h1>People List</h1>
+
+  <ul>
+  	<li ng-repeat="person in ctrl.peopleList">
+  		{{person}}
+  	</li>
+  </ul>
+</div>

@@ -1,10 +1,25 @@
 ---
 name: worker
 url: /worker
-controller: "workerCtrl as wk"
+controller: "workerCtrl as ctrl"
 animationIn: slideInLeft
 ---
+<h1>Worker</h1>
+<div class="grid-block">
+<a class="button show-for-small-only" zf-toggle="sidebar">Options</a>
+ 
+  <!-- Sidebar with menu options -->
+  <zf-panel id="sidebar" position="left" zf-swipe-close="left" class="medium-grid-block medium-4">
+    <a zf-close="" class="close-button show-for-small-only">×</a>
 
-<div class="grid-container">
-  <h1>Worker</h1>
+    <ul class="vertical menu-bar">
+      <li ng-repeat="menu in ctrl.loginState.menu"><a ui-sref="{{menu.sref}}">{{menu.title}}</a></li>   
+      <li><a ng-click="ctrl.loginState.logout()">Logout</a></li>
+
+    </ul>
+  </zf-panel>
+
+  <!-- Application Action Area -->
+  <div class="grid-block small-12 medium-8" ui-view></div>
+  
 </div>

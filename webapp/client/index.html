@@ -10,7 +10,7 @@
     <script src="./assets/js/routes.js"></script>
     <script src="./assets/js/app.js"></script>
   </head>
-  <body ng-controller="mainPageCtrl as m">
+  <body ng-controller="mainPageCtrl as ctrl">
     <div class="grid-frame vertical">
       <div class="grid-content shrink" style="padding: 0;">
 
@@ -21,12 +21,7 @@
           </span>
           <span class="title center">
               <a><strong>iTrak CMMS</strong></a>
-          </span>
-          <span class="right" ng-show="m.isLoggedIn()">
-              <a ng-click="m.home()"><img zf-iconic="" icon="action" size="small">Home</a>
-              <a ng-click="m.logout()">Logout</a>
-          </span>
-          
+          </span>         
         </div>
 
       <div ui-view class="grid-content">

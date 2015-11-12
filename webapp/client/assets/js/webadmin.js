@@ -12,25 +12,9 @@
     }
 
     angular.extend(this, {
-      loginState: loginState,
-
-      people: function() {
-        $state.go('people')
-      },
-      site: function() {
-        $state.go('site')
-      },
-      equipment: function() {
-        $state.go('equipment')
-      },
-      workorder: function() {
-        $state.go('workorder')
-      },
-      task: function() {
-        $state.go('task')
-      }
-    })
-
+      loginState: loginState
+    });
+    
   });
 
 })();

@@ -1,54 +1,25 @@
 ---
 name: admin
 url: /admin
-controller: "adminCtrl as ac"
+controller: "adminCtrl as ctrl"
 animationIn: slideInLeft
 ---
-
 <h1>Administrator</h1>
+<div class="grid-block">
+<a class="button show-for-small-only" zf-toggle="sidebar">Options</a>
+ 
+  <!-- Sidebar with menu options -->
+  <zf-panel id="sidebar" position="left" zf-swipe-close="left" class="medium-grid-block medium-4">
+    <a zf-close="" class="close-button show-for-small-only">×</a>
 
+    <ul class="vertical menu-bar">
+      <li ng-repeat="menu in ctrl.loginState.menu"><a ui-sref="{{menu.sref}}">{{menu.title}}</a></li>   
+      <li><a ng-click="ctrl.loginState.logout()">Logout</a></li>
 
-<div class="chooser">
-    <div class="choice" ng-click="ac.people()">
-      <img src="assets/img/people.jpg" alt="People">
-      <div class="card-divider">People</div>
-      <div class="card-section show-for-medium-up">
-        Workers, Managers and Vendors.
-      </div>
-    </div>
-    <div class="choice" ng-click="ac.site()">
-      <img src="assets/img/site.jpg" alt="Sites">
-      <div class="card-divider">Sites</div>
-      <div class="card-section show-for-medium-up">
-        Factory Sites
-      </div>
-    </div>
-    <div class="choice" ng-click="ac.equipment()">
-      <img src="assets/img/equipment.gif" alt="Equipment">
-      <div class="card-divider">Equipment</div>
-      <div class="card-section show-for-medium-up">
-        Factory Equipment
-      </div>
-    </div>   
-    <div class="choice" ng-click="ac.workorder()">
-      <img src="assets/img/workorder.jpg" alt="Work Orders">
-      <div class="card-divider">Work Orders</div>
-      <div class="card-section show-for-medium-up">
-        Work Orders
-      </div>
-    </div>
-    <div class="choice" ng-click="ac.task()">
-      <img src="assets/img/task.jpg" alt="Tasks">
-      <div class="card-divider">Tasks</div>
-      <div class="card-section show-for-medium-up">
-        A WorkOrder broken down into Tasks
-      </div>
-    </div>
-    <div class="choice">
-      <img src="assets/img/task.jpg" alt="Tasks">
-      <div class="card-divider">Tasks</div>
-      <div class="card-section show-for-medium-up">
-        A WorkOrder broken down into Tasks
-      </div>
-    </div>
+    </ul>
+  </zf-panel>
+
+  <!-- Application Action Area -->
+  <div class="grid-block small-12 medium-8" ui-view></div>
+  
 </div>

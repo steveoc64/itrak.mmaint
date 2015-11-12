@@ -37,7 +37,7 @@ func main() {
 		AllowedOrigins:   []string{"*"},
 		AllowedMethods:   []string{"GET", "POST", "DELETE", "PUT", "PATCH"},
 		AllowCredentials: true,
-		Debug:            true,
+		Debug:            itrak.Debug,
 	})
 	e.Use(c.Handler)
 

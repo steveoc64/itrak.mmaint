@@ -15,7 +15,9 @@ var server_stats *stats.Stats
 
 func loadHandlers(e *echo.Echo) {
 
-	e.SetDebug(true)
+	if itrak.Debug {
+		e.SetDebug(true)
+	}
 
 	// Point to the client application generated inside the webapp dir
 	e.Index("./webapp/build/index.html")
