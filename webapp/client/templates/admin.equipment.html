@@ -17,19 +17,19 @@ animationIn: slideInLeft
 		</div>
 		<div class="small-12 grid-content">
 			<label>Description</label>
-			<input type="text" placeholder="Comments" ng-model="equipment.descr">
+			<input type="text" placeholder="Description" ng-model="equipment.descr">
 		</div>
 		<div class="small-12 grid-content">
 			<label>Comments</label>
-			<input type="text" placeholder="Phone" ng-model="equipment.comments">
+			<input type="text" placeholder="Comments" ng-model="equipment.comments">
 		</div>
 		<div class="small-6 grid-content">
 			<label>Model Number</label>
-			<input type="text" placeholder="Email" ng-model="equipment.modelno">
+			<input type="text" placeholder="Model #" ng-model="equipment.modelno">
 		</div>
 		<div class="small-4 grid-content">
 			<label>Serial Number</label>
-			<input type="text" placeholder="Lat" ng-model="equipment.serialno">
+			<input type="text" placeholder="Serial #" ng-model="equipment.serialno">
 		</div>
 		<div class="small-4 grid-content">
 			<label>Location</label>
@@ -39,15 +39,15 @@ animationIn: slideInLeft
 		</div>
 		<div class="small4 grid-content">
 			<label>Category</label>
-			<input type="text" placeholder="Lat" ng-model="equipment.category">
+			<input type="text" placeholder="Category" ng-model="equipment.category">
 		</div>
 		<div class="small4 grid-content">
 			<label>Vendor</label>
-			<input type="text" placeholder="Lat" ng-model="equipment.vendor">
+			<input type="text" placeholder="Vendor" ng-model="equipment.vendor">
 		</div>
 		<div class="small4 grid-content">
 			<label>Parent Part</label>
-			<input type="text" placeholder="Lat" ng-model="equipment.parent_id">
+			<a ui-sref="admin.equipmentdetails({id: equipment.parent_id})">{{equipment.parent_name}}</a>
 		</div>
 
 		</div>

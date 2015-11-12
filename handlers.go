@@ -171,6 +171,6 @@ func getRoles(c *echo.Context) error {
 // Logic for handling the Equipment table
 
 func getEquipment(c *echo.Context) error {
-	sqlResult, _ := SQLMap(db, "select * from equipment order by name")
+	sqlResult, _ := SQLMap(db, "select e.*,p.name as parent_name from equipment e left outer join equipment p on (p.id=e.parent_id)")
 	return c.JSON(http.StatusOK, sqlResult)
 }
