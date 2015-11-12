@@ -104,6 +104,7 @@
     angular.extend(this, {
       username: '',
       passwd: '',
+      loginState: loginState,
       login:  function () {
           loginState.login(this.username, this.passwd)
         }

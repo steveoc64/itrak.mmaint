@@ -1,0 +1,44 @@
+---
+name: admin.site
+url: /site
+animationIn: slideInLeft
+---
+<div class="grid-container">
+
+  <h3>List of Sites</h3>
+
+	<zf-accordion>
+		<zf-accordion-item title="{{site.name}}" ng-repeat="site in ctrl.sites">
+
+		<div class="grid-block">
+		<div class="small-12 grid-content">
+			<label>Name</label>
+			<input type="text" placeholder="Name" ng-model="site.name">
+		</div>
+		<div class="small-12 grid-content">
+			<label>Address</label>
+			<input type="text" placeholder="Comments" ng-model="site.address">
+			<a ng-href="{{ctrl.getSiteURI(site.address)}}" target="googlemaps">Map</a>
+		</div>
+		<div class="small-6 grid-content">
+			<label>Phone</label>
+			<input type="text" placeholder="Phone" ng-model="site.phone">
+		</div>
+		<div class="small-6 grid-content">
+			<label>Contact</label>
+			<input type="text" placeholder="Email" ng-model="site.contact">
+		</div>
+		<div class="small4 grid-content">
+			<label>Map Location - Latitude</label>
+			<input type="text" placeholder="Lat" ng-model="site.lat">
+		</div>
+		<div class="small4 grid-content">
+			<label>Longitude</label>
+			<input type="text" placeholder="Lon" ng-model="site.lon">
+		</div>
+		</div>
+
+		</zf-accordion-item>
+	</zf-accordion>
+
+</div>

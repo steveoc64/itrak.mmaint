@@ -28,7 +28,6 @@ func loadHandlers(e *echo.Echo) {
 
 	e.Get("/stats", getStats)
 	e.Get("/test1", getTestData)
-	e.Get("/equipment", getEquipment)
 	e.Get("/part", getPartsList)
 	e.Get("/task", getTaskList)
 	e.Get("/jtask", getJTaskList)
@@ -45,6 +44,9 @@ func loadHandlers(e *echo.Echo) {
 	e.Post("/site", createSite)
 	e.Patch("/site/:id", updateSite)
 	e.Delete("/site/:id", deleteSite)
+
+	e.Get("/roles", getRoles)
+	e.Get("/equipment", getEquipment)
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////
@@ -56,11 +58,6 @@ func getStats(c *echo.Context) error {
 
 func getTestData(c *echo.Context) error {
 	res, _ := SQLMap(db, "select * from test1")
-	return c.JSON(http.StatusOK, res)
-}
-
-func getEquipment(c *echo.Context) error {
-	res, _ := SQLMap(db, "select * from fm_equipment order by name")
 	return c.JSON(http.StatusOK, res)
 }
 
@@ -126,7 +123,7 @@ func logout(c *echo.Context) error {
 // Logic for handling people requests
 
 func getPeople(c *echo.Context) error {
-	sqlResult, _ := SQLMap(db, "select * from person")
+	sqlResult, _ := SQLMap(db, "select * from person order by name")
 	return c.JSON(http.StatusOK, sqlResult)
 }
 func createPeople(c *echo.Context) error {
@@ -146,7 +143,7 @@ func deletePeople(c *echo.Context) error {
 // Logic for handling Site requests
 
 func getSite(c *echo.Context) error {
-	sqlResult, _ := SQLMap(db, "select * from site")
+	sqlResult, _ := SQLMap(db, "select * from site order by name")
 	return c.JSON(http.StatusOK, sqlResult)
 }
 func createSite(c *echo.Context) error {
@@ -158,6 +155,22 @@ func updateSite(c *echo.Context) error {
 	return c.JSON(http.StatusOK, sqlResult)
 }
 func deleteSite(c *echo.Context) error {
-	sqlResult, _ := SQLMap(db, "select * from site")
+	sqlResult, _ := SQLMap(db, "select * from site order by name")
+	return c.JSON(http.StatusOK, sqlResult)
+}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////
+// Logic for handling the Roles table
+
+func getRoles(c *echo.Context) error {
+	sqlResult, _ := SQLMap(db, "select * from roles order by id")
+	return c.JSON(http.StatusOK, sqlResult)
+}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////
+// Logic for handling the Equipment table
+
+func getEquipment(c *echo.Context) error {
+	sqlResult, _ := SQLMap(db, "select * from equipment order by name")
 	return c.JSON(http.StatusOK, sqlResult)
 }

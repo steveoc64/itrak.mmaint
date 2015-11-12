@@ -3,13 +3,60 @@ name: admin.people
 url: /people
 animationIn: slideInLeft
 ---
-
 <div class="grid-container">
-  <h1>People List</h1>
 
-  <ul>
-  	<li ng-repeat="person in ctrl.peopleList">
-  		{{person}}
-  	</li>
-  </ul>
+  <h3>List of People</h3>
+
+	<zf-accordion>
+		<zf-accordion-item title="{{person.name}}" ng-repeat="person in ctrl.people">
+
+		<div class="grid-block">
+		<div class="small-12 grid-content">
+		<label>Name 
+			<input type="text" placeholder="Name" ng-model="person.name">
+		</label>
+		</div>
+		<div class="small-12 grid-content">
+		<label>Comments 
+			<input type="text" placeholder="Comments" ng-model="person.comments">
+		</label>
+		</div>
+		<div class="small-6 grid-content">
+		<label>Phone
+			<input type="text" placeholder="Phone" ng-model="person.phone">
+		</label>
+		</div>
+		<div class="small-6 grid-content">
+		<label>Email
+			<input type="text" placeholder="Email" ng-model="person.email">
+		</label>
+		</div>
+		<div class="small-4 grid-content">
+		<label>Hourly Rate
+			<input type="text" placeholder="Hourly Rate" ng-model="person.hourlyrate">
+		</label>
+		</div>
+		<div class="small-4 grid-content">
+			<label>Location</label>
+			<select ng-model="person.location">
+			<option ng-repeat="loc in ctrl.sites" value="{{loc.id}}">{{loc.name}}</option>
+			</select>
+		</div>
+		<div class="small-4 grid-content">
+			<label>Role</label>
+			<select ng-model="person.role">
+			<option ng-repeat="r in ctrl.roles" value="{{r.id}}">{{r.name}}</option>
+			</select>
+		</div>
+
+		<div class="small-12 grid-content right shrink">
+			<a class="button success" href="#">Reset</a>		
+			<a class="button warning" href="#">Delete</a>		
+			<a class="button" href="#">Save</a>				
+		</div>
+		</div>
+
+		</zf-accordion-item>
+	</zf-accordion>
+
 </div>

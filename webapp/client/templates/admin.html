@@ -12,9 +12,17 @@ animationIn: slideInLeft
   <zf-panel id="sidebar" position="left" zf-swipe-close="left" class="medium-grid-block medium-4">
     <a zf-close="" class="close-button show-for-small-only">×</a>
 
-    <ul class="vertical menu-bar">
-      <li ng-repeat="menu in ctrl.loginState.menu"><a ui-sref="{{menu.sref}}">{{menu.title}}</a></li>   
+    <section class="block-list">
+    <header>Menu Options</header>
+    <ul>
+      <li ng-repeat="menu in ctrl.loginState.menu">
+        <a ng-click="ctrl.go(menu)"> {{menu.title}}</a>
+      </li>   
       <li><a ng-click="ctrl.loginState.logout()">Logout</a></li>
+    </ul>   
+    </section>
+
+    <ul class="vertical menu-bar">
 
     </ul>
   </zf-panel>

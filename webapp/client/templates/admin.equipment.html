@@ -1,0 +1,59 @@
+---
+name: admin.equipment
+url: /equipment
+animationIn: slideInLeft
+---
+<div class="grid-container">
+
+  <h3>List of Equipment</h3>
+
+	<zf-accordion>
+		<zf-accordion-item title="{{equipment.name}}" ng-repeat="equipment in ctrl.equipment">
+
+		<div class="grid-block">
+		<div class="small-12 grid-content">
+			<label>Name</label>
+			<input type="text" placeholder="Name" ng-model="equipment.name">
+		</div>
+		<div class="small-12 grid-content">
+			<label>Description</label>
+			<input type="text" placeholder="Comments" ng-model="equipment.descr">
+		</div>
+		<div class="small-12 grid-content">
+			<label>Comments</label>
+			<input type="text" placeholder="Phone" ng-model="equipment.comments">
+		</div>
+		<div class="small-6 grid-content">
+			<label>Model Number</label>
+			<input type="text" placeholder="Email" ng-model="equipment.modelno">
+		</div>
+		<div class="small-4 grid-content">
+			<label>Serial Number</label>
+			<input type="text" placeholder="Lat" ng-model="equipment.serialno">
+		</div>
+		<div class="small-4 grid-content">
+			<label>Location</label>
+			<select ng-model="equipment.location">
+			<option ng-repeat="loc in ctrl.sites" value="{{loc.id}}">{{loc.name}}</option>
+			</select>
+		</div>
+		<div class="small4 grid-content">
+			<label>Category</label>
+			<input type="text" placeholder="Lat" ng-model="equipment.category">
+		</div>
+		<div class="small4 grid-content">
+			<label>Vendor</label>
+			<input type="text" placeholder="Lat" ng-model="equipment.vendor">
+		</div>
+		<div class="small4 grid-content">
+			<label>Parent Part</label>
+			<input type="text" placeholder="Lat" ng-model="equipment.parent_id">
+		</div>
+
+		</div>
+
+		</zf-accordion-item>
+	</zf-accordion>
+
+
+</div>
