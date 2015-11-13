@@ -46,6 +46,7 @@ func loadHandlers(e *echo.Echo) {
 	e.Delete("/site/:id", deleteSite)
 
 	e.Get("/roles", getRoles)
+	e.Get("/vendors", getVendors)
 	e.Get("/equipment", getEquipment)
 }
 
@@ -164,6 +165,14 @@ func deleteSite(c *echo.Context) error {
 
 func getRoles(c *echo.Context) error {
 	sqlResult, _ := SQLMap(db, "select * from roles order by id")
+	return c.JSON(http.StatusOK, sqlResult)
+}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////
+// Logic for handling the Vendors table
+
+func getVendors(c *echo.Context) error {
+	sqlResult, _ := SQLMap(db, "select * from vendor order by id")
 	return c.JSON(http.StatusOK, sqlResult)
 }
 

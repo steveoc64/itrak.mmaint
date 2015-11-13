@@ -21,7 +21,13 @@
       menuSelection: '',
       params: $stateParams,
       selectedSites: [],
-      filteredEquips: [],
+      siteEquips: [],
+      mainSiteEquips: [],
+      equipmentTypes: [
+        {id: 1, name: 'Consumables'},
+        {id: 2, name: 'Mech'},
+        {id: 3, name: 'Spare Parts'},
+      ],
 
       // Beware - Black Magik in here to call auto resolver function
       // - looks for a function with _XXXXX, where XXXXX = name of the
@@ -42,14 +48,40 @@
         console.log('Toggled site',id)
         this.rebuildFilteredEquip()
       },
+      toggleAllSites: function() {
+        if (this.selectedSites[0]) {
+          // ALL is selected, so turn them all off
+          this.selectedSites = []
+        } else {
+          // Turn ALL on
+          this.selectedSites = []
+          if (this.siteSelected.length) {
+            angular.forEach(this.sites, function(v,k){
+              this.selectedSites[v.id] = true
+            },this)
+          } 
+        }
+        this.rebuildFilteredEquip()
+      },
       rebuildFilteredEquip: function() {
-        console.log('Rebuilding filtered equip list from',this.selectedSites)
-        this.filteredEquips = []
+        //console.log('Rebuilding filtered equip list from',this.selectedSites)
+        this.siteEquips = []
+
+        // First, get a list of equipments for this site
         angular.forEach(this.equipment, function(v,k){
           if (this.selectedSites[v.location]) {
-            this.filteredEquips.push(v)
+            this.siteEquips.push(v)
           }
         },this)
+
+        // Now, create a sub-list which is just the parent items on this site
+        this.mainSiteEquips = []
+        angular.forEach(this.siteEquips, function(v,k){
+          if (v.parent_id == 0) {
+            this.mainSiteEquips.push(v)
+          }
+        },this)        
+
       },
       getSiteURI: function(m) {
         return "https://www.google.com/maps?q="+encodeURIComponent(m)
@@ -68,6 +100,7 @@
       _equipment: function() {
         this.getEquipment()
         this.getSites()
+        this.getVendors()
       },
 
       viewEquipmentDetails: function(id) {
@@ -93,16 +126,20 @@
         console.log('loading Roles List')
         this.roles = Roles.query()
       },
+      getVendors: function() {
+        console.log('loading Vendors List')
+        this.vendors = Vendors.query()
+      },
       getEquipment: function() {
         console.log('Loading Equipment List')
         this.equipment = Equipment.query()
       },
       getEquipmentDetails: function(id) {
         var e = this.equipment
-        console.log('Looking for',id)
+        //console.log('Looking for',id)
         for (var i = 0; i < e.length; i++) {
           if (id === e[i].id) {
-            console.log('Found',e[i])
+            //console.log('Found',e[i])
             return e[i]
           }
         };

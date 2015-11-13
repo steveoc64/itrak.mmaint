@@ -2,11 +2,11 @@
 name: admin.people
 url: /people
 ---
-<div class="grid-container">
+<div class="grid-block">
 
-  <h3>List of People</h3>
+  <h3 class="grid-content small-12">List of People</h3>
 
-	<zf-accordion>
+	<zf-accordion class="grid-content small-12">
 		<zf-accordion-item title="{{person.name}}" ng-repeat="person in ctrl.people">
 
 		<div class="grid-block">

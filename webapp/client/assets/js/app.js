@@ -14,10 +14,10 @@
   ])
     .config(config)
     .run(run)
-  ;
-
-  angular.module('itrak').constant('ServerName', 'http://localhost:8082')
-
+    .constant('ServerName', 'http://localhost:8082')
+    .filter('unsafe', function($sce) { return $sce.trustAsHtml; })
+    ;
+  
   config.$inject = ['$urlRouterProvider', '$locationProvider'];
 
   function config($urlProvider, $locationProvider) {

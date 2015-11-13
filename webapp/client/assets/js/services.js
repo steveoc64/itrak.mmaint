@@ -44,6 +44,11 @@
     return $resource(ServerName+'/roles');
   })
 
+  // Vendors
+  angular.module('itrak').factory('Vendors', function($resource, ServerName){
+    return $resource(ServerName+'/vendors');
+  })
+
 
 
 })();
