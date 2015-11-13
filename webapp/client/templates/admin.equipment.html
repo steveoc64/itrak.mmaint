@@ -6,13 +6,15 @@ url: /equipment
 
   <h3 class="grid-content small-12">Select Site</h3>
 
-  <div class="grid-block small-12">
+  <div class="grid-block small-12 shrink">
+  	<div class="grid-content small-3">
 		<input type="checkbox" 
 			ng-model="ctrl.allSites"
 			ng-change="ctrl.toggleAllSites()" 
 			id="0">
-		<label class="right" for="0">All</label>  		
-	<div class="switch grid-content small-3" 
+		<label class="right" for="0">All</label>  		  		
+  	</div>
+	<div class="grid-content small-3" 
 	     ng-repeat="site in ctrl.sites">
 		<input type="checkbox" 
 			ng-model="ctrl.selectedSites[site.id]" 
@@ -86,7 +88,7 @@ url: /equipment
 		</div>
 
 		<div class="small-4 grid-content">
-			<button>Details</button>
+			<button class="primary" ui-sref="admin.equipmentdetails({id: equipment.id})">Details</button>
 		</div>
 
 		</div>

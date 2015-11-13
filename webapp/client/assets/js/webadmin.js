@@ -49,8 +49,8 @@
         this.rebuildFilteredEquip()
       },
       toggleAllSites: function() {
-        if (this.selectedSites[0]) {
-          // ALL is selected, so turn them all off
+        if (!this.allSites) {
+          // ALL is NOT selected, so turn them all off
           this.selectedSites = []
         } else {
           // Turn ALL on
