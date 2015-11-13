@@ -105,8 +105,7 @@
 
       viewEquipmentDetails: function(id) {
         console.log("Getting details for id",id)
-        this.equipmentDetails = this.getEquipmentDetails(id)
-        if (this.equipmentDetails) {
+        if (this.equipmentDetails(id)) {
           console.log('found',this.equipmentDetails)
           $state.go("admin.equipment.details",{"id": id})
         } else {
@@ -135,16 +134,16 @@
         this.equipment = Equipment.query()
       },
       getEquipmentDetails: function(id) {
-        var e = this.equipment
-        //console.log('Looking for',id)
-        for (var i = 0; i < e.length; i++) {
-          if (id === e[i].id) {
-            //console.log('Found',e[i])
-            return e[i]
+        this.equipmentDetail = null
+        angular.forEach(this.equipment, function(v,k){
+          if (v.id === id) {
+            this.equipmentDetail = v
           }
-        };
-        return null
+        },this)
       },
+      myCibo: function() {
+        alert('myCibo')
+      }
 
     });
     

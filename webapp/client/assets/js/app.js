@@ -31,8 +31,12 @@
     $locationProvider.hashPrefix('!');
   }
 
-  function run() {
+  function run($rootScope) {
     FastClick.attach(document.body);
+
+    $rootScope.$on('$stateChangeStart', function (event, toState) {
+      console.log('RootScope sees',event,toState)
+    })    
   }  
 
 })();

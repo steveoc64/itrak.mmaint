@@ -45,8 +45,8 @@
   })
 
   // Vendors
-  angular.module('itrak').factory('Vendors', function($resource, ServerName){
-    return $resource(ServerName+'/vendors');
+  angular.module('itrak').factory('CiboLate', function($resource, ServerName){
+    return $resource(ServerName+'/Cibo');
   })
 
 

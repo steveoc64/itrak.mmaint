@@ -2,9 +2,71 @@
 name: admin.equipmentdetails
 url: /equipment/:id
 ---
-<div class="grid-block">
 
-  <h3>Equipment Details</h3>
+<div class="grid-block vertical">
+
+  <h3 class="grid-content small-12">Equipment Details</h3>
+
+  <div class="grid-content small-12">
+		<div class="small-12 grid-content">
+			<label>Name</label>
+			<input type="text" placeholder="Name" ng-model="equipment.name">
+		</div>
+		<div class="small-12 grid-content">
+			<label>Description</label>
+			<input type="text" placeholder="Description" ng-model="equipment.descr">
+		</div>
+		<div class="small-12 grid-content">
+			<label>Comments</label>
+			<input type="text" placeholder="Comments" ng-model="equipment.comments">
+		</div>
+		<div class="small-12 grid-content">
+			<p ng-bind-html="equipment.comments | unsafe"></p>
+		</div>
+
+		<div class="small-4 grid-content">
+			<label>Location</label>
+			<select ng-model="equipment.location">
+			<option ng-repeat="loc in ctrl.sites" 
+			        value="{{loc.id}}"
+			        ng-selected="loc.id == equipment.location">{{loc.name}}</option>
+			</select>
+		</div>
+		<div class="small-4 grid-content">
+			<label>Model Number</label>
+			<input type="text" placeholder="Model #" ng-model="equipment.modelno">
+		</div>
+		<div class="small-4 grid-content">
+			<label>Serial Number</label>
+			<input type="text" placeholder="Serial #" ng-model="equipment.serialno">
+		</div>
+
+		<div class="small-4 grid-content">
+			<label>Category</label>
+			<select ng-model="equipment.category">
+			<option ng-repeat="cat in ctrl.equipmentTypes" 
+			        value="{{cat.id}}"
+			        ng-selected="cat.id == equipment.category">{{cat.name}}</option>
+			</select>
+		</div>
+		<div class="small-8 grid-content">
+			<label>Vendor</label>
+			<select ng-model="equipment.vendor">
+			<option ng-repeat="v in ctrl.vendors" 
+			        value="{{v.id}}"
+			        ng-selected="v.id == equipment.vendor">{{v.name}}</option>
+			</select>
+		</div>
+
+		<div class="small-8 grid-content">
+			<label>Parent Part</label>
+			<a ui-sref="admin.equipmentdetails({id: equipment.parent_id})">{{equipment.parent_name}}</a>
+		</div>
+
+		<div class="small-4 grid-content">
+			<button class="primary" ui-sref="admin.equipmentdetails({id: equipment.id})">Details</button>
+		</div>
+
 
   {{ctrl.getEquipmentDetails(params.id)}}
   {{ctrl.equipmentdetails}}
