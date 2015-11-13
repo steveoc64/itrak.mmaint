@@ -21,6 +21,7 @@
       menuSelection: '',
       params: $stateParams,
       selectedSites: [],
+      filteredEquips: [],
 
       // Beware - Black Magik in here to call auto resolver function
       // - looks for a function with _XXXXX, where XXXXX = name of the
@@ -37,12 +38,25 @@
         $state.go(menu.sref)
       },
 
+      siteSelected: function(id) {
+        console.log('Toggled site',id)
+        this.rebuildFilteredEquip()
+      },
+      rebuildFilteredEquip: function() {
+        console.log('Rebuilding filtered equip list from',this.selectedSites)
+        this.filteredEquips = []
+        angular.forEach(this.equipment, function(v,k){
+          if (this.selectedSites[v.location]) {
+            this.filteredEquips.push(v)
+          }
+        },this)
+      },
       getSiteURI: function(m) {
         return "https://www.google.com/maps?q="+encodeURIComponent(m)
       },
 
       // Called when initialising various screens, see
-      // the nasty code above in the 'go' function
+      // the nasty code above in the 'goMenu' function
       _people: function() {
         this.getPeople()
         this.getSites()

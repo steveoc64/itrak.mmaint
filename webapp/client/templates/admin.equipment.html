@@ -7,16 +7,19 @@ url: /equipment
   <h3 class="grid-content small-12">Select Site</h3>
 
   <div class="grid-block small-12">
-	<div class="switch grid-content small-2" ng-repeat="site in ctrl.sites">
-		<input type="checkbox" ng-model="ctrl.selectedSites[site.id]" id="site.id">
-		<label for="{{site.id}}">{{site.id}} {{site.name}}</label>
+	<div class="switch grid-content small-3" ng-repeat="site in ctrl.sites">
+		<input type="checkbox" 
+			ng-model="ctrl.selectedSites[site.id]" 
+			ng-change="ctrl.siteSelected(site.id)" 
+			id="{{site.id}}">
+		<label class="right" for="{{site.id}}">{{site.name}}</label>
 	</div>
   </div>
 
   <h3 class="grid-content small-12">List of Equipment</h3>
 
 	<zf-accordion class="grid-content small-12">
-		<zf-accordion-item title="{{equipment.name}}" ng-repeat="equipment in ctrl.equipment">
+		<zf-accordion-item title="{{equipment.name}}" ng-repeat="equipment in ctrl.filteredEquips">
 
 		<div class="grid-block">
 		<div class="small-12 grid-content">

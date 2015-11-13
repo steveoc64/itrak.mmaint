@@ -37,6 +37,7 @@ var paths = {
     'bower_components/hammerjs/hammer.js',
     'bower_components/angular/angular.js',
     'bower_components/angular-animate/angular-animate.js',
+    'bower_components/ngSanitize/index.js',
     'bower_components/angular-resource/angular-resource.js',
     'bower_components/angular-ui-router/release/angular-ui-router.js',
     'bower_components/foundation-apps/js/vendor/**/*.js',
