@@ -180,6 +180,16 @@ func getVendors(c *echo.Context) error {
 // Logic for handling the Equipment table
 
 func getEquipment(c *echo.Context) error {
-	sqlResult, _ := SQLMap(db, "select e.*,p.name as parent_name from equipment e left outer join equipment p on (p.id=e.parent_id)")
+	sqlResult, err := SQLMap(db,
+		`select e.*,
+			p.name as parent_name,
+			l.name as location_name
+		from equipment e 
+			left outer join equipment p on (p.id=e.parent_id)
+			left outer join site l on (l.id=e.location)
+		order by location_name,e.name`)
+	if err != nil {
+		log.Println(err.Error())
+	}
 	return c.JSON(http.StatusOK, sqlResult)
 }
