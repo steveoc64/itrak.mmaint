@@ -1,13 +1,21 @@
 ---
 name: admin.equipment
 url: /equipment
-animationIn: slideInLeft
 ---
 <div class="grid-block">
 
-  <h3>List of Equipment</h3>
+  <h3 class="grid-content small-12">Select Site</h3>
 
-	<zf-accordion>
+  <div class="grid-block small-12">
+	<div class="switch grid-content small-2" ng-repeat="site in ctrl.sites">
+		<input type="checkbox" ng-model="ctrl.selectedSites[site.id]" id="site.id">
+		<label for="{{site.id}}">{{site.id}} {{site.name}}</label>
+	</div>
+  </div>
+
+  <h3 class="grid-content small-12">List of Equipment</h3>
+
+	<zf-accordion class="grid-content small-12">
 		<zf-accordion-item title="{{equipment.name}}" ng-repeat="equipment in ctrl.equipment">
 
 		<div class="grid-block">
@@ -22,6 +30,9 @@ animationIn: slideInLeft
 		<div class="small-12 grid-content">
 			<label>Comments</label>
 			<input type="text" placeholder="Comments" ng-model="equipment.comments">
+			<p>
+				{{equipment.comments}}
+			</p>
 		</div>
 		<div class="small-6 grid-content">
 			<label>Model Number</label>
@@ -48,6 +59,10 @@ animationIn: slideInLeft
 		<div class="small4 grid-content">
 			<label>Parent Part</label>
 			<a ui-sref="admin.equipmentdetails({id: equipment.parent_id})">{{equipment.parent_name}}</a>
+		</div>
+
+		<div class="small-4 grid-content">
+			<button>Details</button>
 		</div>
 
 		</div>

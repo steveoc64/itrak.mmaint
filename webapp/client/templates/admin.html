@@ -2,21 +2,21 @@
 name: admin
 url: /admin
 controller: "adminCtrl as ctrl"
-animationIn: slideInLeft
+animationIn: slideInRight
 ---
 <h1>Administrator</h1>
 <div class="grid-block">
 <a class="button show-for-small-only" zf-toggle="sidebar">Options</a>
  
   <!-- Sidebar with menu options -->
-  <zf-panel id="sidebar" position="left" zf-swipe-close="left" class="medium-grid-block medium-4">
+  <zf-panel id="sidebar" position="left" zf-swipe-close="left" class="medium-grid-block medium-3">
     <a zf-close="" class="close-button show-for-small-only">×</a>
 
     <section class="block-list">
     <header>Menu Options</header>
     <ul>
       <li ng-repeat="menu in ctrl.loginState.menu">
-        <a ng-click="ctrl.go(menu)"> {{menu.title}}</a>
+        <a zf-close="sidebar" ng-click="ctrl.goMenu(menu)"> {{menu.title}}</a>
       </li>   
       <li><a ng-click="ctrl.loginState.logout()">Logout</a></li>
     </ul>   
@@ -28,6 +28,6 @@ animationIn: slideInLeft
   </zf-panel>
 
   <!-- Application Action Area -->
-  <div class="grid-block small-12 medium-8" ui-view></div>
+  <div class="grid-block small-12 medium-9" ui-view></div>
   
 </div>

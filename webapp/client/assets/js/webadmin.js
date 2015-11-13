@@ -20,11 +20,12 @@
       loginState: loginState,
       menuSelection: '',
       params: $stateParams,
+      selectedSites: [],
 
       // Beware - Black Magik in here to call auto resolver function
       // - looks for a function with _XXXXX, where XXXXX = name of the
       // sub UI-router view
-      go: function(menu) {
+      goMenu: function(menu) {
         var cstr = menu.sref.split(".")
         if (cstr.length > 1) {
           var fn = this['_'+cstr[1]]
