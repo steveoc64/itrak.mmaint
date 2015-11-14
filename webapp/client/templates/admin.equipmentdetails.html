@@ -1,8 +1,3 @@
----
-name: admin.equipmentdetails
-url: /equipment/:id
----
-
 <div class="grid-block vertical">
 
   <h3 class="grid-content small-12">Equipment Details</h3>
@@ -10,65 +5,61 @@ url: /equipment/:id
   <div class="grid-content small-12">
 		<div class="small-12 grid-content">
 			<label>Name</label>
-			<input type="text" placeholder="Name" ng-model="equipment.name">
+			<input type="text" placeholder="Name" ng-model="adminEquipmentDetCtrl.equipment.name">
 		</div>
 		<div class="small-12 grid-content">
 			<label>Description</label>
-			<input type="text" placeholder="Description" ng-model="equipment.descr">
+			<input type="text" placeholder="Description" ng-model="adminEquipmentDetCtrl.equipment.descr">
 		</div>
 		<div class="small-12 grid-content">
 			<label>Comments</label>
-			<input type="text" placeholder="Comments" ng-model="equipment.comments">
+			<input type="text" placeholder="Comments" ng-model="adminEquipmentDetCtrl.equipment.comments">
 		</div>
 		<div class="small-12 grid-content">
-			<p ng-bind-html="equipment.comments | unsafe"></p>
+			<p ng-bind-html="adminEquipmentDetCtrl.equipment.comments | unsafe"></p>
 		</div>
 
 		<div class="small-4 grid-content">
 			<label>Location</label>
-			<select ng-model="equipment.location">
-			<option ng-repeat="loc in ctrl.sites" 
+			<select ng-model="adminEquipmentDetCtrl.equipment.location">
+			<option ng-repeat="loc in adminEquipmentDetCtrl.sites" 
 			        value="{{loc.id}}"
-			        ng-selected="loc.id == equipment.location">{{loc.name}}</option>
+			        ng-selected="loc.id == adminEquipmentDetCtrl.equipment.location">{{loc.name}}</option>
 			</select>
 		</div>
 		<div class="small-4 grid-content">
 			<label>Model Number</label>
-			<input type="text" placeholder="Model #" ng-model="equipment.modelno">
+			<input type="text" placeholder="Model #" ng-model="adminEquipmentDetCtrl.equipment.modelno">
 		</div>
 		<div class="small-4 grid-content">
 			<label>Serial Number</label>
-			<input type="text" placeholder="Serial #" ng-model="equipment.serialno">
+			<input type="text" placeholder="Serial #" ng-model="adminEquipmentDetCtrl.equipment.serialno">
 		</div>
 
 		<div class="small-4 grid-content">
 			<label>Category</label>
-			<select ng-model="equipment.category">
-			<option ng-repeat="cat in ctrl.equipmentTypes" 
+			<select ng-model="adminEquipmentDetCtrl.equipment.category">
+			<option ng-repeat="cat in adminEquipmentDetCtrl.equipmentTypes" 
 			        value="{{cat.id}}"
-			        ng-selected="cat.id == equipment.category">{{cat.name}}</option>
+			        ng-selected="cat.id == adminEquipmentDetCtrl.equipment.category">{{cat.name}}</option>
 			</select>
 		</div>
 		<div class="small-8 grid-content">
 			<label>Vendor</label>
-			<select ng-model="equipment.vendor">
-			<option ng-repeat="v in ctrl.vendors" 
+			<select ng-model="adminEquipmentDetCtrl.equipment.vendor">
+			<option ng-repeat="v in adminEquipmentDetCtrl.vendors" 
 			        value="{{v.id}}"
-			        ng-selected="v.id == equipment.vendor">{{v.name}}</option>
+			        ng-selected="v.id == adminEquipmentDetCtrl.equipment.vendor">{{v.name}}</option>
 			</select>
 		</div>
 
 		<div class="small-8 grid-content">
 			<label>Parent Part</label>
-			<a ui-sref="admin.equipmentdetails({id: equipment.parent_id})">{{equipment.parent_name}}</a>
+			<a ui-sref="admin.equipmentdetails({id: adminEquipmentDetCtrl.equipment.parent_id})">{{adminEquipmentDetCtrl.equipment.parent_name}}</a>
 		</div>
 
 		<div class="small-4 grid-content">
-			<button class="primary" ui-sref="admin.equipmentdetails({id: equipment.id})">Details</button>
+			<a class="button" ui-sref="admin.equipmentdetails({id: adminEquipmentDetCtrl.equipment.id})">Details</a>
 		</div>
-
-
-  {{ctrl.getEquipmentDetails(params.id)}}
-  {{ctrl.equipmentdetails}}
 
 </div>

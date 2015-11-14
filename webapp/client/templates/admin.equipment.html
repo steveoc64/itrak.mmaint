@@ -1,7 +1,3 @@
----
-name: admin.equipment
-url: /equipment
----
 <div class="grid-block">
 
   <h3 class="grid-content small-12">Select Site</h3>
@@ -9,16 +5,16 @@ url: /equipment
   <div class="grid-block small-12 shrink">
   	<div class="grid-content small-3">
 		<input type="checkbox" 
-			ng-model="ctrl.allSites"
-			ng-change="ctrl.toggleAllSites()" 
+			ng-model="adminEquipmentCtrl.allSites"
+			ng-change="adminEquipmentCtrl.toggleAllSites()" 
 			id="0">
 		<label class="right" for="0">All</label>  		  		
   	</div>
 	<div class="grid-content small-3" 
-	     ng-repeat="site in ctrl.sites">
+	     ng-repeat="site in adminEquipmentCtrl.sites">
 		<input type="checkbox" 
-			ng-model="ctrl.selectedSites[site.id]" 
-			ng-change="ctrl.siteSelected(site.id)" 
+			ng-model="adminEquipmentCtrl.selectedSites[site.id]" 
+			ng-change="adminEquipmentCtrl.siteSelected(site.id)" 
 			id="{{site.id}}">
 		<label class="right" for="{{site.id}}">{{site.name}}</label>
 	</div>
@@ -29,7 +25,7 @@ url: /equipment
 	<zf-accordion class="grid-content small-12">
 		<zf-accordion-item 
 		    title="{{equipment.name}}  ....  {{equipment.location_name}}"
-		    ng-repeat="equipment in ctrl.mainSiteEquips">
+		    ng-repeat="equipment in adminEquipmentCtrl.mainSiteEquips">
 
 		<div class="grid-block">
 		<div class="small-12 grid-content">
@@ -51,7 +47,7 @@ url: /equipment
 		<div class="small-4 grid-content">
 			<label>Location</label>
 			<select ng-model="equipment.location">
-			<option ng-repeat="loc in ctrl.sites" 
+			<option ng-repeat="loc in adminEquipmentCtrl.sites" 
 			        value="{{loc.id}}"
 			        ng-selected="loc.id == equipment.location">{{loc.name}}</option>
 			</select>
@@ -68,7 +64,7 @@ url: /equipment
 		<div class="small-4 grid-content">
 			<label>Category</label>
 			<select ng-model="equipment.category">
-			<option ng-repeat="cat in ctrl.equipmentTypes" 
+			<option ng-repeat="cat in adminEquipmentCtrl.equipmentTypes" 
 			        value="{{cat.id}}"
 			        ng-selected="cat.id == equipment.category">{{cat.name}}</option>
 			</select>
@@ -76,19 +72,20 @@ url: /equipment
 		<div class="small-8 grid-content">
 			<label>Vendor</label>
 			<select ng-model="equipment.vendor">
-			<option ng-repeat="v in ctrl.vendors" 
+			<option ng-repeat="v in adminEquipmentCtrl.vendors" 
 			        value="{{v.id}}"
 			        ng-selected="v.id == equipment.vendor">{{v.name}}</option>
 			</select>
 		</div>
 
 		<div class="small-8 grid-content">
-			<label>Parent Part</label>
-			<a ui-sref="admin.equipmentdetails({id: equipment.parent_id})">{{equipment.parent_name}}</a>
-		</div>
-
-		<div class="small-4 grid-content">
-			<button class="primary" ui-sref="admin.equipmentdetails({id: equipment.id})">Details</button>
+			<div ng-hide="equipment.parent_id == 0">
+				<label>Parent Part</label>
+				<a class="secondary button" ui-sref="admin.equipmentdetails({id: equipment.parent_id})">
+				View {{equipment.parent_name}}
+				</a>
+			</div> 
+			<a class="button" ui-sref="admin.equipmentdetails({id: equipment.id})">Details</a>
 		</div>
 
 		</div>

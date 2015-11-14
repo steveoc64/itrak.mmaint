@@ -11,12 +11,12 @@
 
   // Sites
   angular.module('itrak').factory('Sites', function($resource, ServerName){
-    return $resource(ServerName+'/site/:id');
+    return $resource(ServerName+'/site/:id', {id: '@id'});
   })
 
   // Equipment
   angular.module('itrak').factory('Equipment', function($resource, ServerName){
-    return $resource(ServerName+'/equipment/:id');
+    return $resource(ServerName+'/equipment/:id', {id: '@id'});
   })
 
   // WorkOrders
@@ -31,7 +31,7 @@
 
   // Vendors
   angular.module('itrak').factory('Vendors', function($resource, ServerName){
-    return $resource(ServerName+'/vendor/:id');
+    return $resource(ServerName+'/vendors/:id');
   })
 
   // Spare Parts

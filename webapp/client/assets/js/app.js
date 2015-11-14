@@ -9,19 +9,19 @@
 
     //foundation
     'foundation',
-    'foundation.dynamicRouting',
-    'foundation.dynamicRouting.animations'
+    //'foundation.dynamicRouting',
+    //'foundation.dynamicRouting.animations'
   ])
     .config(config)
     .run(run)
-    .constant('ServerName', 'http://localhost:8082')
+    .constant('ServerName', '')
     .filter('unsafe', function($sce) { return $sce.trustAsHtml; })
     ;
   
-  config.$inject = ['$urlRouterProvider', '$locationProvider'];
+  config.$inject = ['$stateProvider','$urlRouterProvider', '$locationProvider'];
 
-  function config($urlProvider, $locationProvider) {
-    $urlProvider.otherwise('/');
+  function config($stateProvider, $urlRouterProvider, $locationProvider) {
+    $urlRouterProvider.otherwise('/');
 
     $locationProvider.html5Mode({
       enabled:false,
@@ -29,14 +29,65 @@
     });
 
     $locationProvider.hashPrefix('!');
+
+    // Manually create all the routes here
+    $stateProvider
+      .state('login',{
+        url: '/',
+        templateUrl: 'templates/login.html',
+        controller: 'loginCtrl',
+        controllerAs: 'loginCtrl',
+        animation: {
+          enter: 'hingeInFromTop'
+        },
+      })
+        .state('admin',{
+          url: '/admin',
+          templateUrl: 'templates/admin.html',
+          controller: 'adminCtrl',
+          controllerAs: 'adminCtrl',
+          animation: {
+            enter: 'slideInRight'
+          }
+        })
+          .state('admin.equipment',{
+            url: '/equipment',
+            templateUrl: 'templates/admin.equipment.html',
+            controller: 'adminEquipmentCtrl',
+            controllerAs: 'adminEquipmentCtrl',
+            resolve: {
+              equipment: function(Equipment) {
+                return Equipment.query()
+              },
+              sites: function(Sites) {
+                return Sites.query()
+              },
+              vendors: function(Vendors) {
+                return Vendors.query()
+              }
+            }
+          })
+          .state('admin.equipmentdetails',{
+            url: '/equipment/:id',
+            templateUrl: 'templates/admin.equipmentdetails.html',
+            controller: 'adminEquipmentDetCtrl',
+            controllerAs: 'adminEquipmentDetCtrl',
+            resolve: {
+              equipment: function($stateParams,Equipment) {
+                return Equipment.get({id: $stateParams.id})
+              },
+              sites: function(Sites) {
+                return Sites.query()
+              },
+              vendors: function(Vendors) {
+                return Vendors.query()
+              }
+            }
+          })
   }
 
   function run($rootScope) {
     FastClick.attach(document.body);
-
-    $rootScope.$on('$stateChangeStart', function (event, toState) {
-      console.log('RootScope sees',event,toState)
-    })    
   }  
 
 })();

@@ -1,9 +1,3 @@
----
-name: admin
-url: /admin
-controller: "adminCtrl as ctrl"
-animationIn: slideInRight
----
 <h1>Administrator</h1>
 <div class="grid-block">
 <a class="button show-for-small-only" zf-toggle="sidebar">Options</a>
@@ -15,10 +9,10 @@ animationIn: slideInRight
     <section class="block-list">
     <header>Menu Options</header>
     <ul>
-      <li ng-repeat="menu in ctrl.loginState.menu">
-        <a zf-close="sidebar" ng-click="ctrl.goMenu(menu)"> {{menu.title}}</a>
+      <li ng-repeat="menu in adminCtrl.loginState.menu">
+        <a zf-close="sidebar" ui-sref="{{menu.sref}}"> {{menu.title}}</a>
       </li>   
-      <li><a ng-click="ctrl.loginState.logout()">Logout</a></li>
+      <li><a ng-click="adminCtrl.loginState.logout()">Logout</a></li>
     </ul>   
     </section>
 
