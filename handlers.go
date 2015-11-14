@@ -47,8 +47,11 @@ func loadHandlers(e *echo.Echo) {
 
 	e.Get("/roles", getRoles)
 	e.Get("/vendors", getVendors)
+
 	e.Get("/equipment", getAllEquipment)
 	e.Get("/equipment/:id", getEquipment)
+	e.Post("/equipment/:id", saveEquipment)
+	e.Get("/subparts/:id", subParts)
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////
@@ -102,7 +105,7 @@ func login(c *echo.Context) error {
 	if err != nil {
 		log.Println("Bind Error:", err.Error())
 	}
-	log.Println("Login Credentials", l)
+	//log.Println("Login Credentials", l)
 
 	sqlResult, _ := SQLMap(db, "select username,role from users where username=$1 and passwd=$2",
 		l.Username,
@@ -194,6 +197,19 @@ func getVendors(c *echo.Context) error {
 /////////////////////////////////////////////////////////////////////////////////////////////////
 // Logic for handling the Equipment table
 
+type equipmentType struct {
+	ID        string
+	Name      string
+	Descr     string
+	Comments  string
+	Modelno   string
+	Serialno  string
+	Location  string
+	Parent_id string
+	Category  string
+	Vendor    string
+}
+
 func getAllEquipment(c *echo.Context) error {
 	sqlResult, err := SQLMap(db,
 		`select e.*,
@@ -203,6 +219,26 @@ func getAllEquipment(c *echo.Context) error {
 			left outer join equipment p on (p.id=e.parent_id)
 			left outer join site l on (l.id=e.location)
 		order by location_name,e.name`)
+	if err != nil {
+		log.Println(err.Error())
+	}
+	return c.JSON(http.StatusOK, sqlResult)
+}
+
+func subParts(c *echo.Context) error {
+	id, iderr := strconv.Atoi(c.Param("id"))
+	if iderr != nil {
+		return c.String(http.StatusNotAcceptable, "Invalid ID")
+	}
+	sqlResult, err := SQLMap(db,
+		`select e.*,
+			p.name as parent_name,
+			l.name as location_name
+		from equipment e 
+			left outer join equipment p on (p.id=e.parent_id)
+			left outer join site l on (l.id=e.location)
+		where e.parent_id=$1
+		order by location_name,e.name`, id)
 	if err != nil {
 		log.Println(err.Error())
 	}
@@ -227,5 +263,46 @@ func getEquipment(c *echo.Context) error {
 	if err != nil {
 		log.Println(err.Error())
 	}
+	return c.JSON(http.StatusOK, sqlResult)
+}
+
+func saveEquipment(c *echo.Context) error {
+	id, iderr := strconv.Atoi(c.Param("id"))
+	if iderr != nil {
+		return c.String(http.StatusNotAcceptable, "Invalid ID")
+	}
+
+	eq := new(equipmentType)
+	if binderr := c.Bind(eq); binderr != nil {
+		log.Println(binderr.Error())
+		return binderr
+	}
+	log.Println(eq)
+
+	sqlResult, err := ExecDb(db,
+		`update equipment 
+			set name=$2,
+			    descr=$3,
+			    comments=$4,
+			    modelno=$5,
+			    serialno=$6,
+			    location=$7,
+			    vendor=$8,
+			    category=$9
+			where id=$1`,
+		id,
+		eq.Name,
+		eq.Descr,
+		eq.Comments,
+		eq.Modelno,
+		eq.Serialno,
+		eq.Location,
+		eq.Vendor,
+		eq.Category)
+
+	if err != nil {
+		log.Println(err.Error())
+	}
+
 	return c.JSON(http.StatusOK, sqlResult)
 }
