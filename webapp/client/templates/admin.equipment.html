@@ -81,11 +81,11 @@
 		<div class="small-8 grid-content">
 			<div ng-hide="equipment.parent_id == 0">
 				<label>Parent Part</label>
-				<a class="secondary button" ui-sref="admin.equipmentdetails({id: equipment.parent_id})">
-				View {{equipment.parent_name}}
+				<a class="secondary button" ui-sref="admin.equipment_details({id: equipment.parent_id})">
+				{{equipment.parent_name}}
 				</a>
 			</div> 
-			<a class="button" ui-sref="admin.equipmentdetails({id: equipment.id})">Details</a>
+			<a class="button" ui-sref="admin.equipment_details({id: equipment.id})">Full Details</a>
 		</div>
 
 		</div>

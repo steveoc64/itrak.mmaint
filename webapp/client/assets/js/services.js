@@ -19,6 +19,11 @@
     return $resource(ServerName+'/equipment/:id', {id: '@id'});
   })
 
+  // SubParts of a peice of Equipment
+  angular.module('itrak').factory('SubParts', function($resource, ServerName){
+    return $resource(ServerName+'/subparts/:id', {id: '@id'});
+  })
+
   // WorkOrders
   angular.module('itrak').factory('WorkOrders', function($resource, ServerName){
     return $resource(ServerName+'/workorders/:id');

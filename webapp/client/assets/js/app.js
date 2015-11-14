@@ -56,7 +56,7 @@
             controller: 'adminEquipmentCtrl',
             controllerAs: 'adminEquipmentCtrl',
             resolve: {
-              equipment: function(Equipment) {
+              equipments: function(Equipment) {
                 return Equipment.query()
               },
               sites: function(Sites) {
@@ -67,14 +67,17 @@
               }
             }
           })
-          .state('admin.equipmentdetails',{
-            url: '/equipment/:id',
-            templateUrl: 'templates/admin.equipmentdetails.html',
+          .state('admin.equipment_details',{
+            url: '/equipdetails/:id',
+            templateUrl: 'templates/admin.equipment_details.html',
             controller: 'adminEquipmentDetCtrl',
             controllerAs: 'adminEquipmentDetCtrl',
             resolve: {
               equipment: function($stateParams,Equipment) {
                 return Equipment.get({id: $stateParams.id})
+              },
+              subparts: function($stateParams,SubParts) {
+                return SubParts.query({id: $stateParams.id})
               },
               sites: function(Sites) {
                 return Sites.query()

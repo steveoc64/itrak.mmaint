@@ -28,8 +28,9 @@
   angular.module('itrak')
     .controller('adminEquipmentCtrl', function(
       $state, $stateParams,
+      FoundationApi,Equipment,
       loginState,    
-      equipment,sites,vendors
+      equipments,sites,vendors
     ){     
 
     console.log('Running Admin Equipment controller',$stateParams)
@@ -49,7 +50,7 @@
       selectedSites: [],
       siteEquips: [],
       mainSiteEquips: [],      
-      equipment: equipment,
+      equipments: equipments,
       sites: sites,
       vendors: vendors,
 
@@ -80,7 +81,7 @@
         this.siteEquips = []
 
         // First, get a list of equipments for this site
-        angular.forEach(this.equipment, function(v,k){
+        angular.forEach(this.equipments, function(v,k){
           if (this.selectedSites[v.location]) {
             this.siteEquips.push(v)
           }
@@ -101,18 +102,32 @@
       }
 
     }) // extend this 
+
+    var vm = this
+    FoundationApi.subscribe('equipment', function(v) {
+      console.log('MSG: equipment',v)
+      switch(v) {
+        case 'reload':
+          Equipment.query().$promise.then(function(result){
+            vm.equipments = result
+            vm.rebuildFilteredEquip()
+          })
+          break
+      }
+    })
+
   })
 
   // Admin version of Equipment Detail
   angular.module('itrak')
     .controller('adminEquipmentDetCtrl', function(
       $state, $stateParams,
-      loginState,    
-      equipment,sites,vendors
+      FoundationApi,
+      loginState, $scope,
+      equipment,sites,vendors,subparts
     ){     
 
     console.log('Running Admin Equipment Det controller',$stateParams)
-
     if (!loginState.loggedIn) {
       $state.go('login')
     }
@@ -130,7 +145,13 @@
       equipment: equipment,
       sites: sites,
       vendors: vendors,
+      subparts: subparts,
 
+      save: function() {
+        equipment.$save()
+        FoundationApi.publish('equipment','reload')
+        $state.go('admin.equipment')
+      },
       getSiteMapURI: function(m) {
         return "https://www.google.com/maps?q="+encodeURIComponent(m)
       },
