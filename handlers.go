@@ -55,6 +55,9 @@ func loadHandlers(e *echo.Echo) {
 	e.Get("/spares", getAllSpares)
 	e.Get("/spares/:id", getEquipment)
 	e.Post("/spares/:id", saveEquipment)
+	e.Get("/consumables", getAllConsumables)
+	e.Get("/consumables/:id", getEquipment)
+	e.Post("/consumables/:id", saveEquipment)
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////
@@ -364,6 +367,22 @@ func getAllSpares(c *echo.Context) error {
 			left outer join equipment p on (p.id=e.parent_id)
 			left outer join site l on (l.id=e.location)
 		where e.category=3
+		order by location_name,e.name`)
+	if err != nil {
+		log.Println(err.Error())
+	}
+	return c.JSON(http.StatusOK, sqlResult)
+}
+
+func getAllConsumables(c *echo.Context) error {
+	sqlResult, err := SQLMap(db,
+		`select e.*,
+			p.name as parent_name,
+			l.name as location_name
+		from equipment e 
+			left outer join equipment p on (p.id=e.parent_id)
+			left outer join site l on (l.id=e.location)
+		where e.category=1
 		order by location_name,e.name`)
 	if err != nil {
 		log.Println(err.Error())

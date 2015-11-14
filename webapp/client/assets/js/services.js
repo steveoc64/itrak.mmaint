@@ -28,6 +28,10 @@
   angular.module('itrak').factory('Spares', function($resource, ServerName){
     return $resource(ServerName+'/spares/:id', {id: '@id'});
   })
+  // Consumables
+  angular.module('itrak').factory('Consumables', function($resource, ServerName){
+    return $resource(ServerName+'/consumables/:id', {id: '@id'});
+  })
 
   // WorkOrders
   angular.module('itrak').factory('WorkOrders', function($resource, ServerName){

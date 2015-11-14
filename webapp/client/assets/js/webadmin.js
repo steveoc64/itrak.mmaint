@@ -28,7 +28,7 @@
   angular.module('itrak')
     .controller('adminEquipmentCtrl', function(
       $state, $stateParams,
-      FoundationApi,
+      FoundationApi,Equipment,
       loginState,    
       equipments,sites,vendors
     ){     
@@ -129,95 +129,63 @@
       $state, $stateParams,
       FoundationApi,
       loginState,    
-      equipments,sites,vendors
+      spares,sites,vendors
     ){     
 
-    console.log('Running Admin Equipment controller',$stateParams)
+    console.log('Running Admin Spares controller',$stateParams)
 
     if (!loginState.loggedIn) {
       $state.go('login')
     }
 
     angular.extend(this, {
-      equipmentTypes: [
-        {id: 1, name: 'Consumables'},
-        {id: 2, name: 'Mech'},
-        {id: 3, name: 'Spare Parts'},
-      ],
-
-      allSites: false,
-      selectedSites: [],
-      siteEquips: [],
-      mainSiteEquips: [],      
-      equipments: equipments,
+      spares: spares,
       sites: sites,
       vendors: vendors,
-
-      siteSelected: function(id) {
-        console.log('Toggled site',id)
-        this.rebuildFilteredEquip()
-      },
-
-      toggleAllSites: function() {
-        console.log('ToggleAll')
-        if (!this.allSites) {
-          // ALL is NOT selected, so turn them all off
-          this.selectedSites = []
-        } else {
-          // Turn ALL on
-          this.selectedSites = []
-          if (this.siteSelected.length) {
-            angular.forEach(this.sites, function(v,k){
-              this.selectedSites[v.id] = true
-            },this)
-          } 
-        }
-        this.rebuildFilteredEquip()
-      },
-
-      rebuildFilteredEquip: function() {
-        //console.log('Rebuilding filtered equip list from',this.selectedSites)
-        this.siteEquips = []
-
-        // First, get a list of equipments for this site
-        angular.forEach(this.equipments, function(v,k){
-          if (this.selectedSites[v.location]) {
-            this.siteEquips.push(v)
-          }
-        },this)
-
-        // Now, create a sub-list which is just the parent items on this site
-        this.mainSiteEquips = []
-        angular.forEach(this.siteEquips, function(v,k){
-          if (v.parent_id == 0) {
-            this.mainSiteEquips.push(v)
-          }
-        },this)        
-
-      },
 
       getSiteMapURI: function(m) {
         return "https://www.google.com/maps?q="+encodeURIComponent(m)
       },
 
-      changed: function(v) {
-        console.log('Changed',v)
+      changed: function(spare) {
+        console.log('Changed',spare.id)
+        spare.$save({id: spare.id})
       }
 
     }) // extend this 
 
-    var vm = this
-    FoundationApi.subscribe('equipment', function(v) {
-      console.log('MSG: equipment',v)
-      switch(v) {
-        case 'reload':
-          Equipment.query().$promise.then(function(result){
-            vm.equipments = result
-            vm.rebuildFilteredEquip()
-          })
-          break
+  })
+
+  // Admin version of Spares List
+  angular.module('itrak')
+    .controller('adminConsumablesCtrl', function(
+      $state, $stateParams,
+      FoundationApi,
+      loginState,    
+      consumables,sites,vendors
+    ){     
+
+    console.log('Running Admin Consumables controller',$stateParams)
+
+    if (!loginState.loggedIn) {
+      $state.go('login')
+    }
+
+    angular.extend(this, {
+      consumables: consumables,
+      sites: sites,
+      vendors: vendors,
+
+      getSiteMapURI: function(m) {
+        return "https://www.google.com/maps?q="+encodeURIComponent(m)
+      },
+
+      changed: function(part) {
+        console.log('Changed',part.id)
+        part.$save({id: part.id})
       }
-    })
+
+    }) // extend this 
 
   })
 

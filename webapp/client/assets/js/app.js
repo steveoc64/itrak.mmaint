@@ -106,7 +106,29 @@
               },
               vendors: function(Vendors) {
                 return Vendors.query()
+              },
+              sites: function(Sites) {
+                return Sites.query()
               }
+
+            }
+          })
+          .state('admin.consumables',{
+            url: '/cons',
+            templateUrl: 'templates/admin.consumables.html',
+            controller: 'adminConsumablesCtrl',
+            controllerAs: 'adminConsumablesCtrl',
+            resolve: {
+              consumables: function(Consumables) {
+                return Consumables.query()
+              },
+              vendors: function(Vendors) {
+                return Vendors.query()
+              },
+              sites: function(Sites) {
+                return Sites.query()
+              }
+
             }
           })
           .state('admin.equipment_details',{

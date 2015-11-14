@@ -1,0 +1,49 @@
+<div class="grid-block">
+
+  <h3 class="grid-content small-12">Equipment - Consumables</h3>
+
+	<zf-accordion class="grid-content small-12">
+		<zf-accordion-item 
+		    title="{{consumable.name}}  ....  {{consumable.location_name}}"
+		    ng-repeat="consumable in adminConsumablesCtrl.consumables">
+
+		<div class="grid-block align-right">
+			<div class="small-12 grid-content">
+				<label>Name / Description</label>
+				<input type="text" placeholder="Name" 
+   			           ng-model-options="{ updateOn: 'default blur', debounce: { 'default': 800, 'blur': 0 } }"
+			           ng-change="adminConsumablesCtrl.changed(consumable)"
+					   ng-model="consumable.name">
+				<input type="text" placeholder="Description" 
+   			           ng-model-options="{ updateOn: 'default blur', debounce: { 'default': 800, 'blur': 0 } }"
+			           ng-change="adminConsumablesCtrl.changed(consumable)"
+				       ng-model="consumable.descr">
+				<div class="thumbnails">
+				<p ng-bind-html="consumables.comments | unsafe"></p>
+				</div>
+			</div>
+
+			<div class="small-6 grid-content">
+				<label>Model Number</label>
+				<input type="text" placeholder="Model #" 
+   			           ng-model-options="{ updateOn: 'default blur', debounce: { 'default': 800, 'blur': 0 } }"
+			           ng-change="adminConsumablesCtrl.changed(consumable)"
+				       ng-model="consumable.modelno">
+			</div>
+			<div class="small-6 grid-content">
+				<label>Serial Number</label>
+				<input type="text" placeholder="Serial #" 
+   			           ng-model-options="{ updateOn: 'default blur', debounce: { 'default': 800, 'blur': 0 } }"
+			           ng-change="adminConsumablesCtrl.changed(consumable)"
+				       ng-model="consumable.serialno">
+			</div>
+			<div class="small-12 grid-content">
+				<a class="button" ui-sref="admin.equipment_details({id: consumable.id})">Full Details</a>
+			</div>
+		</div>
+
+		</zf-accordion-item>
+	</zf-accordion>
+
+
+</div>
