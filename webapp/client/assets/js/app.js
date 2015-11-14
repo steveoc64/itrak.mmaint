@@ -67,6 +67,17 @@
               }
             }
           })
+          .state('admin.site',{
+            url: '/site',
+            templateUrl: 'templates/admin.site.html',
+            controller: 'adminSiteCtrl',
+            controllerAs: 'adminSiteCtrl',
+            resolve: {
+              sites: function(Sites) {
+                return Sites.query()
+              },
+            }
+          })
           .state('admin.equipment',{
             url: '/equipment',
             templateUrl: 'templates/admin.equipment.html',
@@ -78,6 +89,20 @@
               },
               sites: function(Sites) {
                 return Sites.query()
+              },
+              vendors: function(Vendors) {
+                return Vendors.query()
+              }
+            }
+          })
+          .state('admin.spares',{
+            url: '/spares',
+            templateUrl: 'templates/admin.spares.html',
+            controller: 'adminSparesCtrl',
+            controllerAs: 'adminSparesCtrl',
+            resolve: {
+              spares: function(Spares) {
+                return Spares.query()
               },
               vendors: function(Vendors) {
                 return Vendors.query()

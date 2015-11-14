@@ -40,14 +40,21 @@ func loadHandlers(e *echo.Echo) {
 	e.Get("/people/:id", getPerson)
 	e.Post("/people/:id", savePerson)
 
-	e.Get("/site", getSite)
+	e.Get("/site", getSites)
+	e.Get("/site/:id", getSite)
+	e.Post("/site/:id", saveSite)
+
 	e.Get("/roles", getRoles)
 	e.Get("/vendors", getVendors)
 
+	// Equipment Related functions
 	e.Get("/equipment", getAllEquipment)
 	e.Get("/equipment/:id", getEquipment)
 	e.Post("/equipment/:id", saveEquipment)
 	e.Get("/subparts/:id", subParts)
+	e.Get("/spares", getAllSpares)
+	e.Get("/spares/:id", getEquipment)
+	e.Post("/spares/:id", saveEquipment)
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////
@@ -185,11 +192,6 @@ func savePerson(c *echo.Context) error {
 	}
 	log.Println(person)
 
-	UserID := person.UserID
-	if UserID == "" {
-		UserID = "DEFAULT"
-	}
-
 	_, err := ExecDb(db,
 		`update person
 			set user_id=$2,
@@ -203,7 +205,7 @@ func savePerson(c *echo.Context) error {
 			    location=$10
 			where id=$1`,
 		id,
-		ToNullInt64(UserID),
+		ToNullInt64(person.UserID),
 		person.Name,
 		person.Email,
 		person.Phone,
@@ -223,10 +225,64 @@ func savePerson(c *echo.Context) error {
 /////////////////////////////////////////////////////////////////////////////////////////////////
 // Logic for handling Site requests
 
-func getSite(c *echo.Context) error {
+type SiteType struct {
+	ID          string `json:"id"`
+	Name        string `json:"name"`
+	Address     string `json:"address"`
+	Phone       string `json:"phone"`
+	ContactName string `json:"contactname"`
+}
+
+func getSites(c *echo.Context) error {
 	sqlResult, _ := SQLMap(db,
 		"select * from site order by name")
 	return c.JSON(http.StatusOK, sqlResult)
+}
+
+func getSite(c *echo.Context) error {
+	id, iderr := strconv.Atoi(c.Param("id"))
+	if iderr != nil {
+		return c.String(http.StatusNotAcceptable, "Invalid ID")
+	}
+
+	sqlResult, err := SQLMapOne(db, `select * from site where id=$1`, id)
+	if err != nil {
+		log.Println(err.Error())
+	}
+	return c.JSON(http.StatusOK, sqlResult)
+}
+
+func saveSite(c *echo.Context) error {
+	id, iderr := strconv.Atoi(c.Param("id"))
+	if iderr != nil {
+		return c.String(http.StatusNotAcceptable, "Invalid ID")
+	}
+
+	site := new(SiteType)
+	if binderr := c.Bind(site); binderr != nil {
+		log.Println(binderr.Error())
+		return binderr
+	}
+	log.Println(site)
+
+	_, err := ExecDb(db,
+		`update site
+			set name=$2,
+			    address=$3,
+			    phone=$4,
+			    contactname=$5
+			where id=$1`,
+		id,
+		site.Name,
+		site.Address,
+		site.Phone,
+		site.ContactName)
+
+	if err != nil {
+		log.Println(err.Error())
+	}
+
+	return c.JSON(http.StatusOK, site)
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////
@@ -293,6 +349,22 @@ func subParts(c *echo.Context) error {
 			left outer join site l on (l.id=e.location)
 		where e.parent_id=$1
 		order by location_name,e.name`, id)
+	if err != nil {
+		log.Println(err.Error())
+	}
+	return c.JSON(http.StatusOK, sqlResult)
+}
+
+func getAllSpares(c *echo.Context) error {
+	sqlResult, err := SQLMap(db,
+		`select e.*,
+			p.name as parent_name,
+			l.name as location_name
+		from equipment e 
+			left outer join equipment p on (p.id=e.parent_id)
+			left outer join site l on (l.id=e.location)
+		where e.category=3
+		order by location_name,e.name`)
 	if err != nil {
 		log.Println(err.Error())
 	}

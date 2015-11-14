@@ -24,6 +24,11 @@
     return $resource(ServerName+'/subparts/:id', {id: '@id'});
   })
 
+  // Spares
+  angular.module('itrak').factory('Spares', function($resource, ServerName){
+    return $resource(ServerName+'/spares/:id', {id: '@id'});
+  })
+
   // WorkOrders
   angular.module('itrak').factory('WorkOrders', function($resource, ServerName){
     return $resource(ServerName+'/workorders/:id');
