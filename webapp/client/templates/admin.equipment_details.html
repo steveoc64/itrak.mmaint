@@ -2,7 +2,7 @@
 
   <h3 class="grid-content small-12">Equipment Details</h3>
 
-  <div class="grid-content small-12">
+  <div class="grid-block small-12">
 		<div class="small-12 grid-content">
 			<label>Name</label>
 			<input type="text" placeholder="Name" ng-model="adminEquipmentDetCtrl.equipment.name">
@@ -36,7 +36,7 @@
 			<input type="text" placeholder="Serial #" ng-model="adminEquipmentDetCtrl.equipment.serialno">
 		</div>
 
-		<div class="small-4 grid-content">
+		<div class="small-3 grid-content">
 			<label>Category</label>
 			<select ng-model="adminEquipmentDetCtrl.equipment.category">
 			<option ng-repeat="cat in adminEquipmentDetCtrl.equipmentTypes" 
@@ -44,7 +44,7 @@
 			        ng-selected="cat.id == adminEquipmentDetCtrl.equipment.category">{{cat.name}}</option>
 			</select>
 		</div>
-		<div class="small-8 grid-content">
+		<div class="small-9 grid-content">
 			<label>Vendor</label>
 			<select ng-model="adminEquipmentDetCtrl.equipment.vendor">
 			<option ng-repeat="v in adminEquipmentDetCtrl.vendors" 
@@ -53,13 +53,39 @@
 			</select>
 		</div>
 
-		<div class="small-8 grid-content">
+		<div class="small-12 grid-content" ng-show="adminEquipmentDetCtrl.equipment.parent_id > 0">
 			<label>Parent Part</label>
-			<a ui-sref="admin.equipmentdetails({id: adminEquipmentDetCtrl.equipment.parent_id})">{{adminEquipmentDetCtrl.equipment.parent_name}}</a>
-		</div>
+			<a class="secondary button" ui-sref="admin.equipment_details({id: adminEquipmentDetCtrl.equipment.parent_id})">
+				{{adminEquipmentDetCtrl.equipment.parent_name}}
+			</a>
+		</div> 
 
-		<div class="small-4 grid-content">
-			<a class="button" ui-sref="admin.equipmentdetails({id: adminEquipmentDetCtrl.equipment.id})">Details</a>
+		<div class="grid-block align-right">
+			<ul class="button-group grid-content">
+				<li><a class="secondary button" ui-sref="admin.equipment">Return to List</a></li>
+				<li><a class="button" ng-click="adminEquipmentDetCtrl.save()">Save Changes</a></li>	
+			</ul>
 		</div>
+	
+	</div>
 
+	<!-- List of Sub-Parts for this Part -->
+	<div class="grid-block">
+		<section class="block-list grid-content small-12">
+		<header>List of Sub Component Parts</header>
+			<ul>
+				<li ng-repeat="part in adminEquipmentDetCtrl.subparts">
+					<a ui-sref="admin.equipment_details({id: part.id})">
+					{{part.name}} - {{part.descr}} Model: {{part.modelno}} Serial: {{part.serialno}}
+					</a>				
+				</li>
+			</ul>
+		</section>	
+	</div>
+
+	<!-- List of WorkOrders for this Part -->
+	
 </div>
+
+
+
