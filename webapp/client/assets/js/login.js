@@ -46,19 +46,39 @@
             break
           case '3':
             this.homePage = 'vendor'
+            this.menu = [
+              {sref: "vendor.dashboard", title: "Dashboard"},
+              {sref: "vendor.equip", title: "Equipment"},
+              {sref: "vendor.task", title: "Tasks"},
+              {sref: "vendor.spares", title: "Spares"},
+              {sref: "vendor.reports", title: "Reports"}
+            ]
             break
           case '2':
             this.homePage = 'sitemgr'
+            this.menu = [
+              {sref: "sitemgr.dashboard", title: "Dashboard"},
+              {sref: "sitemgr.estop", title: "BreakDown !"},
+              {sref: "sitemgr.pstop", title: "Preventative"},
+              {sref: "sitemgr.equip", title: "Equipment"},
+              {sref: "sitemgr.workorder", title: "WorkOrders"},
+              {sref: "sitemgr.task", title: "Tasks"},
+              {sref: "sitemgr.spares", title: "Spares"},
+              {sref: "sitemgr.reports", title: "Reports"}
+            ]
             break
           case '100':
             this.homePage = 'admin'
             this.menu = [
-              {sref: "admin.dashboard", title: "Dashboard"},
               {sref: "admin.people", title: "People"},
               {sref: "admin.site", title: "Sites"},
               {sref: "admin.equipment", title: "Equipment"},
+              {sref: "admin.spares", title: "Spares"},
+              {sref: "admin.consumables", title: "Consumables"},
+              {sref: "admin.equiptypes", title: "Equipment Types"},
               {sref: "admin.workorder", title: "WorkOrders"},
-              {sref: "admin.task", title: "Tasks"}
+              {sref: "admin.task", title: "Tasks"},
+              {sref: "admin.vendor", title: "Vendors"},
             ]
             break
           default:

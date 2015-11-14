@@ -1,6 +1,7 @@
 package main
 
 import (
+	"database/sql"
 	"github.com/labstack/echo"
 	"github.com/thoas/stats"
 	"log"
@@ -36,15 +37,10 @@ func loadHandlers(e *echo.Echo) {
 	e.Delete("/login", logout)
 
 	e.Get("/people", getPeople)
-	e.Post("/people", createPeople)
-	e.Patch("/people/:id", updatePeople)
-	e.Delete("/people/:id", deletePeople)
+	e.Get("/people/:id", getPerson)
+	e.Post("/people/:id", savePerson)
 
 	e.Get("/site", getSite)
-	e.Post("/site", createSite)
-	e.Patch("/site/:id", updateSite)
-	e.Delete("/site/:id", deleteSite)
-
 	e.Get("/roles", getRoles)
 	e.Get("/vendors", getVendors)
 
@@ -52,6 +48,18 @@ func loadHandlers(e *echo.Echo) {
 	e.Get("/equipment/:id", getEquipment)
 	e.Post("/equipment/:id", saveEquipment)
 	e.Get("/subparts/:id", subParts)
+}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////
+// Some type conversion helper functions
+
+func ToNullString(s string) sql.NullString {
+	return sql.NullString{String: s, Valid: s != ""}
+}
+
+func ToNullInt64(s string) sql.NullInt64 {
+	i, err := strconv.Atoi(s)
+	return sql.NullInt64{Int64: int64(i), Valid: err == nil}
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////
@@ -131,46 +139,91 @@ func logout(c *echo.Context) error {
 /////////////////////////////////////////////////////////////////////////////////////////////////
 // Logic for handling people requests
 
+type PeopleType struct {
+	ID         string `json:"id"`
+	UserID     string `json:"user_id"`
+	Name       string `json:"name"`
+	Email      string `json:"email"`
+	Phone      string `json:"phone"`
+	HourlyRate string `json:"hourlyrate"`
+	Comments   string `json:"comments"`
+	Alternate  string `json:"alternate"`
+	Role       string `json:"role"`
+	Location   string `json:"location"`
+	Calendar   string `json:"calendar"`
+}
+
 func getPeople(c *echo.Context) error {
 	sqlResult, _ := SQLMap(db,
 		"select * from person order by name")
 	return c.JSON(http.StatusOK, sqlResult)
 }
-func createPeople(c *echo.Context) error {
-	sqlResult, _ := SQLMap(db,
-		"select * from person")
+
+func getPerson(c *echo.Context) error {
+	id, iderr := strconv.Atoi(c.Param("id"))
+	if iderr != nil {
+		return c.String(http.StatusNotAcceptable, "Invalid ID")
+	}
+
+	sqlResult, err := SQLMapOne(db, `select * from person where id=$1`, id)
+	if err != nil {
+		log.Println(err.Error())
+	}
 	return c.JSON(http.StatusOK, sqlResult)
 }
-func updatePeople(c *echo.Context) error {
-	sqlResult, _ := SQLMap(db,
-		"select * from person")
-	return c.JSON(http.StatusOK, sqlResult)
-}
-func deletePeople(c *echo.Context) error {
-	sqlResult, _ := SQLMap(db,
-		"select * from person")
-	return c.JSON(http.StatusOK, sqlResult)
+
+func savePerson(c *echo.Context) error {
+	id, iderr := strconv.Atoi(c.Param("id"))
+	if iderr != nil {
+		return c.String(http.StatusNotAcceptable, "Invalid ID")
+	}
+
+	person := new(PeopleType)
+	if binderr := c.Bind(person); binderr != nil {
+		log.Println(binderr.Error())
+		return binderr
+	}
+	log.Println(person)
+
+	UserID := person.UserID
+	if UserID == "" {
+		UserID = "DEFAULT"
+	}
+
+	_, err := ExecDb(db,
+		`update person
+			set user_id=$2,
+			    name=$3,
+			    email=$4,
+			    phone=$5,
+			    hourlyrate=$6,
+			    comments=$7,
+			    alternate=$8,
+			    role=$9,
+			    location=$10
+			where id=$1`,
+		id,
+		ToNullInt64(UserID),
+		person.Name,
+		person.Email,
+		person.Phone,
+		person.HourlyRate,
+		person.Comments,
+		person.Alternate,
+		ToNullInt64(person.Role),
+		ToNullInt64(person.Location))
+
+	if err != nil {
+		log.Println(err.Error())
+	}
+
+	return c.JSON(http.StatusOK, person)
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////
 // Logic for handling Site requests
 
 func getSite(c *echo.Context) error {
-	sqlResult, _ := SQLMap(db,
-		"select * from site order by name")
-	return c.JSON(http.StatusOK, sqlResult)
-}
-func createSite(c *echo.Context) error {
-	sqlResult, _ := SQLMap(db,
-		"select * from site")
-	return c.JSON(http.StatusOK, sqlResult)
-}
-func updateSite(c *echo.Context) error {
-	sqlResult, _ := SQLMap(db,
-		"select * from site")
-	return c.JSON(http.StatusOK, sqlResult)
-}
-func deleteSite(c *echo.Context) error {
 	sqlResult, _ := SQLMap(db,
 		"select * from site order by name")
 	return c.JSON(http.StatusOK, sqlResult)
@@ -198,16 +251,17 @@ func getVendors(c *echo.Context) error {
 // Logic for handling the Equipment table
 
 type equipmentType struct {
-	ID        string `json:"id"`
-	Name      string `json:"name"`
-	Descr     string `json:"descr"`
-	Comments  string `json:"comments"`
-	Modelno   string `json:"modelno"`
-	Serialno  string `json:"serialno"`
-	Location  string `json:"location"`
-	Parent_id string `json:"parent_id"`
-	Category  string `json:"category"`
-	Vendor    string `json:"vendor"`
+	ID          string `json:"id"`
+	Name        string `json:"name"`
+	Descr       string `json:"descr"`
+	Comments    string `json:"comments"`
+	Modelno     string `json:"modelno"`
+	Serialno    string `json:"serialno"`
+	Location    string `json:"location"`
+	Parent_id   string `json:"parent_id"`
+	Category    string `json:"category"`
+	Vendor      string `json:"vendor"`
+	Parent_name string `json:"parent_name"`
 }
 
 func getAllEquipment(c *echo.Context) error {

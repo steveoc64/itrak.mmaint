@@ -127,7 +127,7 @@
     .controller('adminEquipmentDetCtrl', function(
       $state, $stateParams,
       FoundationApi,
-      loginState, $scope,
+      loginState,
       equipment,sites,vendors,subparts
     ){     
 
@@ -152,11 +152,38 @@
       subparts: subparts,
 
       changed: function() {
-        equipment.$save()
+        this.equipment.$save()
         FoundationApi.publish('equipment','reload')
       },
       getSiteMapURI: function(m) {
         return "https://www.google.com/maps?q="+encodeURIComponent(m)
+      },
+    });  // Extend this  
+  });
+
+  // Admin version of Equipment Detail
+  angular.module('itrak')
+    .controller('adminPeopleCtrl', function(
+      $state, $stateParams,
+      FoundationApi,
+      loginState,
+      people,sites,roles
+    ){     
+
+    console.log('Running Admin People controller',$stateParams)
+    if (!loginState.loggedIn) {
+      $state.go('login')
+    }
+
+    angular.extend(this, {
+      people: people,
+      roles: roles,
+      sites: sites,
+
+      changed: function(person) {
+        console.log('people ?',person.id)
+        person.$save({id: person.id})
+        FoundationApi.publish('people','reload')
       },
     });  // Extend this  
   });

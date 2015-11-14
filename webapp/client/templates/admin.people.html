@@ -1,58 +1,76 @@
----
-name: admin.people
-url: /people
----
 <div class="grid-block">
 
   <h3 class="grid-content small-12">List of People</h3>
 
 	<zf-accordion class="grid-content small-12">
-		<zf-accordion-item title="{{person.name}}" ng-repeat="person in ctrl.people">
+		<zf-accordion-item title="{{person.name}}" ng-repeat="person in adminPeopleCtrl.people">
 
 		<div class="grid-block">
 		<div class="small-12 grid-content">
 		<label>Name 
-			<input type="text" placeholder="Name" ng-model="person.name">
+			<input type="text" placeholder="Name" 
+			       ng-model-options="{ updateOn: 'default blur', debounce: { 'default': 800, 'blur': 0 } }"
+			       ng-change="adminPeopleCtrl.changed(person)"
+				   ng-model="person.name">
 		</label>
 		</div>
 		<div class="small-12 grid-content">
 		<label>Comments 
-			<input type="text" placeholder="Comments" ng-model="person.comments">
+			<input type="text" placeholder="Comments" 
+			       ng-model-options="{ updateOn: 'default blur', debounce: { 'default': 800, 'blur': 0 } }"
+			       ng-change="adminPeopleCtrl.changed(person)"
+				   ng-model="person.comments">
 		</label>
 		</div>
+		<div class="small-12 grid-content">
+			<p ng-bind-html="person.comments | unsafe"></p>
+		</div>
+
 		<div class="small-6 grid-content">
 		<label>Phone
-			<input type="text" placeholder="Phone" ng-model="person.phone">
+			<input type="text" placeholder="Phone" 
+			       ng-model-options="{ updateOn: 'default blur', debounce: { 'default': 800, 'blur': 0 } }"
+			       ng-change="adminPeopleCtrl.changed(person)"
+				   ng-model="person.phone">
 		</label>
 		</div>
 		<div class="small-6 grid-content">
 		<label>Email
-			<input type="text" placeholder="Email" ng-model="person.email">
+			<input type="text" placeholder="Email" 
+			       ng-model-options="{ updateOn: 'default blur', debounce: { 'default': 800, 'blur': 0 } }"
+			       ng-change="adminPeopleCtrl.changed(person)"
+				   ng-model="person.email">
 		</label>
 		</div>
 		<div class="small-4 grid-content">
 		<label>Hourly Rate
-			<input type="text" placeholder="Hourly Rate" ng-model="person.hourlyrate">
+			<input type="text" placeholder="Hourly Rate" 
+			       ng-model-options="{ updateOn: 'default blur', debounce: { 'default': 800, 'blur': 0 } }"
+			       ng-change="adminPeopleCtrl.changed(person)"
+				   ng-model="person.hourlyrate">
 		</label>
 		</div>
 		<div class="small-4 grid-content">
 			<label>Location</label>
-			<select ng-model="person.location">
-			<option ng-repeat="loc in ctrl.sites" value="{{loc.id}}">{{loc.name}}</option>
+			<select ng-model="person.location"
+			        ng-model-options="{ updateOn: 'default blur', debounce: { 'default': 800, 'blur': 0 } }"
+			        ng-change="adminPeopleCtrl.changed(person)">
+			<option ng-repeat="loc in adminPeopleCtrl.sites" 
+					ng-selected="loc.id == person.location"
+				    value="{{loc.id}}">{{loc.name}}</option>
 			</select>
 		</div>
 		<div class="small-4 grid-content">
 			<label>Role</label>
-			<select ng-model="person.role">
-			<option ng-repeat="r in ctrl.roles" value="{{r.id}}">{{r.name}}</option>
+			<select ng-model="person.role"
+			        ng-model-options="{ updateOn: 'default blur', debounce: { 'default': 800, 'blur': 0 } }"
+			        ng-change="adminPeopleCtrl.changed(person)">
+			<option ng-repeat="r in adminPeopleCtrl.roles" 
+					ng-selected="r.id == person.role"
+					value="{{r.id}}">{{r.name}}</option>
 			</select>
 		</div>
 
-		<div class="small-12 grid-content right shrink">
-			<a class="button success" href="#">Reset</a>		
-			<a class="button warning" href="#">Delete</a>		
-			<a class="button" href="#">Save</a>				
-		</div>
 		</div>
 
 		</zf-accordion-item>

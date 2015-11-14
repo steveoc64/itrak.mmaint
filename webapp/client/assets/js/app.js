@@ -50,6 +50,23 @@
             enter: 'slideInRight'
           }
         })
+          .state('admin.people',{
+            url: '/people',
+            templateUrl: 'templates/admin.people.html',
+            controller: 'adminPeopleCtrl',
+            controllerAs: 'adminPeopleCtrl',
+            resolve: {
+              people: function(People) {
+                return People.query()
+              },
+              sites: function(Sites) {
+                return Sites.query()
+              },
+              roles: function(Roles) {
+                return Roles.query()
+              }
+            }
+          })
           .state('admin.equipment',{
             url: '/equipment',
             templateUrl: 'templates/admin.equipment.html',
