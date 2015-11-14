@@ -3,9 +3,9 @@ package main
 import (
 	"github.com/labstack/echo"
 	"github.com/thoas/stats"
-
 	"log"
 	"net/http"
+	"strconv"
 )
 
 var server_stats *stats.Stats
@@ -47,7 +47,8 @@ func loadHandlers(e *echo.Echo) {
 
 	e.Get("/roles", getRoles)
 	e.Get("/vendors", getVendors)
-	e.Get("/equipment", getEquipment)
+	e.Get("/equipment", getAllEquipment)
+	e.Get("/equipment/:id", getEquipment)
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////
@@ -58,22 +59,26 @@ func getStats(c *echo.Context) error {
 }
 
 func getTestData(c *echo.Context) error {
-	res, _ := SQLMap(db, "select * from test1")
+	res, _ := SQLMap(db,
+		"select * from test1")
 	return c.JSON(http.StatusOK, res)
 }
 
 func getPartsList(c *echo.Context) error {
-	res, _ := SQLMap(db, "select * from fm_part")
+	res, _ := SQLMap(db,
+		"select * from fm_part")
 	return c.JSON(http.StatusOK, res)
 }
 
 func getTaskList(c *echo.Context) error {
-	res, _ := SQLMap(db, "select lineno,instructions from fm_task order by lineno limit 300")
+	res, _ := SQLMap(db,
+		"select lineno,instructions from fm_task order by lineno limit 300")
 	return c.JSON(http.StatusOK, res)
 }
 
 func getJTaskList(c *echo.Context) error {
-	res, _ := SQLJMap(db, "select lineno,instructions from fm_task order by lineno limit 300")
+	res, _ := SQLJMap(db,
+		"select lineno,instructions from fm_task order by lineno limit 300")
 	return c.JSON(http.StatusOK, res)
 }
 
@@ -124,19 +129,23 @@ func logout(c *echo.Context) error {
 // Logic for handling people requests
 
 func getPeople(c *echo.Context) error {
-	sqlResult, _ := SQLMap(db, "select * from person order by name")
+	sqlResult, _ := SQLMap(db,
+		"select * from person order by name")
 	return c.JSON(http.StatusOK, sqlResult)
 }
 func createPeople(c *echo.Context) error {
-	sqlResult, _ := SQLMap(db, "select * from person")
+	sqlResult, _ := SQLMap(db,
+		"select * from person")
 	return c.JSON(http.StatusOK, sqlResult)
 }
 func updatePeople(c *echo.Context) error {
-	sqlResult, _ := SQLMap(db, "select * from person")
+	sqlResult, _ := SQLMap(db,
+		"select * from person")
 	return c.JSON(http.StatusOK, sqlResult)
 }
 func deletePeople(c *echo.Context) error {
-	sqlResult, _ := SQLMap(db, "select * from person")
+	sqlResult, _ := SQLMap(db,
+		"select * from person")
 	return c.JSON(http.StatusOK, sqlResult)
 }
 
@@ -144,19 +153,23 @@ func deletePeople(c *echo.Context) error {
 // Logic for handling Site requests
 
 func getSite(c *echo.Context) error {
-	sqlResult, _ := SQLMap(db, "select * from site order by name")
+	sqlResult, _ := SQLMap(db,
+		"select * from site order by name")
 	return c.JSON(http.StatusOK, sqlResult)
 }
 func createSite(c *echo.Context) error {
-	sqlResult, _ := SQLMap(db, "select * from site")
+	sqlResult, _ := SQLMap(db,
+		"select * from site")
 	return c.JSON(http.StatusOK, sqlResult)
 }
 func updateSite(c *echo.Context) error {
-	sqlResult, _ := SQLMap(db, "select * from site")
+	sqlResult, _ := SQLMap(db,
+		"select * from site")
 	return c.JSON(http.StatusOK, sqlResult)
 }
 func deleteSite(c *echo.Context) error {
-	sqlResult, _ := SQLMap(db, "select * from site order by name")
+	sqlResult, _ := SQLMap(db,
+		"select * from site order by name")
 	return c.JSON(http.StatusOK, sqlResult)
 }
 
@@ -164,7 +177,8 @@ func deleteSite(c *echo.Context) error {
 // Logic for handling the Roles table
 
 func getRoles(c *echo.Context) error {
-	sqlResult, _ := SQLMap(db, "select * from roles order by id")
+	sqlResult, _ := SQLMap(db,
+		"select * from roles order by id")
 	return c.JSON(http.StatusOK, sqlResult)
 }
 
@@ -172,14 +186,15 @@ func getRoles(c *echo.Context) error {
 // Logic for handling the Vendors table
 
 func getVendors(c *echo.Context) error {
-	sqlResult, _ := SQLMap(db, "select * from vendor order by id")
+	sqlResult, _ := SQLMap(db,
+		"select * from vendor order by id")
 	return c.JSON(http.StatusOK, sqlResult)
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////
 // Logic for handling the Equipment table
 
-func getEquipment(c *echo.Context) error {
+func getAllEquipment(c *echo.Context) error {
 	sqlResult, err := SQLMap(db,
 		`select e.*,
 			p.name as parent_name,
@@ -188,6 +203,27 @@ func getEquipment(c *echo.Context) error {
 			left outer join equipment p on (p.id=e.parent_id)
 			left outer join site l on (l.id=e.location)
 		order by location_name,e.name`)
+	if err != nil {
+		log.Println(err.Error())
+	}
+	return c.JSON(http.StatusOK, sqlResult)
+}
+
+func getEquipment(c *echo.Context) error {
+	id, iderr := strconv.Atoi(c.Param("id"))
+	if iderr != nil {
+		return c.String(http.StatusNotAcceptable, "Invalid ID")
+	}
+
+	sqlResult, err := SQLMapOne(db,
+		`select e.*,
+			p.name as parent_name,
+			l.name as location_name
+		from equipment e 
+			left outer join equipment p on (p.id=e.parent_id)
+			left outer join site l on (l.id=e.location)
+		where e.id=$1
+		order by location_name,e.name`, id)
 	if err != nil {
 		log.Println(err.Error())
 	}

@@ -149,6 +149,17 @@ func SQLJMap(db *sql.DB, sqlStatement string, sqlParams ...interface{}) (string,
 	return string(jsonString), err
 }
 
+func SQLMapOne(db *sql.DB, sqlStatement string, sqlParams ...interface{}) (map[string]string, error) {
+	res, err := SQLMap(db, sqlStatement, sqlParams...)
+	if err != nil {
+		return nil, err
+	}
+	if len(res) > 0 {
+		return res[0], err
+	}
+	return nil, err
+}
+
 func SQLMap(db *sql.DB, sqlStatement string, sqlParams ...interface{}) ([]map[string]string, error) {
 	defer func() {
 		if err := recover(); err != nil {
