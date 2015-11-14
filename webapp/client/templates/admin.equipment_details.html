@@ -5,15 +5,24 @@
   <div class="grid-block small-12">
 		<div class="small-12 grid-content">
 			<label>Name</label>
-			<input type="text" placeholder="Name" ng-model="adminEquipmentDetCtrl.equipment.name">
+			<input type="text" placeholder="Name" 
+			       ng-model="adminEquipmentDetCtrl.equipment.name" 
+			       ng-model-options="{ updateOn: 'default blur', debounce: { 'default': 800, 'blur': 0 } }"
+			       ng-change="adminEquipmentDetCtrl.changed()">
 		</div>
 		<div class="small-12 grid-content">
 			<label>Description</label>
-			<input type="text" placeholder="Description" ng-model="adminEquipmentDetCtrl.equipment.descr">
+			<input type="text" placeholder="Description" 
+	   			   ng-model="adminEquipmentDetCtrl.equipment.descr" 
+				   ng-model-options="{ updateOn: 'default blur', debounce: { 'default': 800, 'blur': 0 } }"
+				   ng-change="adminEquipmentDetCtrl.changed()">
 		</div>
 		<div class="small-12 grid-content">
 			<label>Comments</label>
-			<input type="text" placeholder="Comments" ng-model="adminEquipmentDetCtrl.equipment.comments">
+			<input type="text" placeholder="Comments" 
+			       ng-model="adminEquipmentDetCtrl.equipment.comments" 
+   			       ng-model-options="{ updateOn: 'default blur', debounce: { 'default': 800, 'blur': 0 } }"
+			       ng-change="adminEquipmentDetCtrl.changed()">
 		</div>
 		<div class="small-12 grid-content">
 			<p ng-bind-html="adminEquipmentDetCtrl.equipment.comments | unsafe"></p>
@@ -21,24 +30,34 @@
 
 		<div class="small-4 grid-content">
 			<label>Location</label>
-			<select ng-model="adminEquipmentDetCtrl.equipment.location">
+			<select ng-model="adminEquipmentDetCtrl.equipment.location" 
+    			    ng-model-options="{ updateOn: 'default blur', debounce: { 'default': 800, 'blur': 0 } }"
+				    ng-change="adminEquipmentDetCtrl.changed()">
 			<option ng-repeat="loc in adminEquipmentDetCtrl.sites" 
-			        value="{{loc.id}}"
+			        value="{{loc.id}}"			        
 			        ng-selected="loc.id == adminEquipmentDetCtrl.equipment.location">{{loc.name}}</option>
 			</select>
 		</div>
 		<div class="small-4 grid-content">
 			<label>Model Number</label>
-			<input type="text" placeholder="Model #" ng-model="adminEquipmentDetCtrl.equipment.modelno">
+			<input type="text" placeholder="Model #" 
+			       ng-model="adminEquipmentDetCtrl.equipment.modelno" 
+   			       ng-model-options="{ updateOn: 'default blur', debounce: { 'default': 800, 'blur': 0 } }"
+			       ng-change="adminEquipmentDetCtrl.changed()">
 		</div>
 		<div class="small-4 grid-content">
 			<label>Serial Number</label>
-			<input type="text" placeholder="Serial #" ng-model="adminEquipmentDetCtrl.equipment.serialno">
+			<input type="text" placeholder="Serial #" 
+			       ng-model="adminEquipmentDetCtrl.equipment.serialno" 
+   			       ng-model-options="{ updateOn: 'default blur', debounce: { 'default': 800, 'blur': 0 } }"			       
+			       ng-change="adminEquipmentDetCtrl.changed()">
 		</div>
 
 		<div class="small-3 grid-content">
 			<label>Category</label>
-			<select ng-model="adminEquipmentDetCtrl.equipment.category">
+			<select ng-model="adminEquipmentDetCtrl.equipment.category" 
+   			        ng-model-options="{ updateOn: 'default blur', debounce: { 'default': 800, 'blur': 0 } }"
+			        ng-change="adminEquipmentDetCtrl.changed()">
 			<option ng-repeat="cat in adminEquipmentDetCtrl.equipmentTypes" 
 			        value="{{cat.id}}"
 			        ng-selected="cat.id == adminEquipmentDetCtrl.equipment.category">{{cat.name}}</option>
@@ -46,7 +65,9 @@
 		</div>
 		<div class="small-9 grid-content">
 			<label>Vendor</label>
-			<select ng-model="adminEquipmentDetCtrl.equipment.vendor">
+			<select ng-model="adminEquipmentDetCtrl.equipment.vendor" 
+   			        ng-model-options="{ updateOn: 'default blur', debounce: { 'default': 800, 'blur': 0 } }"
+			        ng-change="adminEquipmentDetCtrl.changed()">
 			<option ng-repeat="v in adminEquipmentDetCtrl.vendors" 
 			        value="{{v.id}}"
 			        ng-selected="v.id == adminEquipmentDetCtrl.equipment.vendor">{{v.name}}</option>
@@ -62,8 +83,10 @@
 
 		<div class="grid-block align-right">
 			<ul class="button-group grid-content">
-				<li><a class="secondary button" ui-sref="admin.equipment">Return to List</a></li>
-				<li><a class="button" ng-click="adminEquipmentDetCtrl.save()">Save Changes</a></li>	
+				<li><a class="button" ui-sref="admin.equipment">
+					<img zf-iconic="" icon="action" size="medium">
+					Return to List
+					</a></li>
 			</ul>
 		</div>
 	
@@ -84,7 +107,7 @@
 	</div>
 
 	<!-- List of WorkOrders for this Part -->
-	
+
 </div>
 
 

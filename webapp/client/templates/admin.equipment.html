@@ -27,66 +27,43 @@
 		    title="{{equipment.name}}  ....  {{equipment.location_name}}"
 		    ng-repeat="equipment in adminEquipmentCtrl.mainSiteEquips">
 
-		<div class="grid-block">
-		<div class="small-12 grid-content">
-			<label>Name</label>
-			<input type="text" placeholder="Name" ng-model="equipment.name">
-		</div>
-		<div class="small-12 grid-content">
-			<label>Description</label>
-			<input type="text" placeholder="Description" ng-model="equipment.descr">
-		</div>
-		<div class="small-12 grid-content">
-			<label>Comments</label>
-			<input type="text" placeholder="Comments" ng-model="equipment.comments">
-		</div>
-		<div class="small-12 grid-content">
-			<p ng-bind-html="equipment.comments | unsafe"></p>
-		</div>
+		<div class="grid-block align-right">
+			<div class="small-12 grid-content">
+				<label>Name / Description</label>
+				<input type="text" placeholder="Name" 
+   			           ng-model-options="{ updateOn: 'default blur', debounce: { 'default': 800, 'blur': 0 } }"
+   			           ng-disabled="true"
+			           ng-change="adminEquipmentCtrl.changed(equipment)"
+					   ng-model="equipment.name">
+				<input type="text" placeholder="Description" 
+   			           ng-disabled="true"
+   			           ng-model-options="{ updateOn: 'default blur', debounce: { 'default': 800, 'blur': 0 } }"
+			           ng-change="adminEquipmentCtrl.changed(equipment)"
+				       ng-model="equipment.descr">
+				<div class="thumbnails">
+				<p ng-bind-html="equipment.comments | unsafe"></p>
+				</div>
+			</div>
 
-		<div class="small-4 grid-content">
-			<label>Location</label>
-			<select ng-model="equipment.location">
-			<option ng-repeat="loc in adminEquipmentCtrl.sites" 
-			        value="{{loc.id}}"
-			        ng-selected="loc.id == equipment.location">{{loc.name}}</option>
-			</select>
-		</div>
-		<div class="small-4 grid-content">
-			<label>Model Number</label>
-			<input type="text" placeholder="Model #" ng-model="equipment.modelno">
-		</div>
-		<div class="small-4 grid-content">
-			<label>Serial Number</label>
-			<input type="text" placeholder="Serial #" ng-model="equipment.serialno">
-		</div>
-
-		<div class="small-4 grid-content">
-			<label>Category</label>
-			<select ng-model="equipment.category">
-			<option ng-repeat="cat in adminEquipmentCtrl.equipmentTypes" 
-			        value="{{cat.id}}"
-			        ng-selected="cat.id == equipment.category">{{cat.name}}</option>
-			</select>
-		</div>
-		<div class="small-8 grid-content">
-			<label>Vendor</label>
-			<select ng-model="equipment.vendor">
-			<option ng-repeat="v in adminEquipmentCtrl.vendors" 
-			        value="{{v.id}}"
-			        ng-selected="v.id == equipment.vendor">{{v.name}}</option>
-			</select>
-		</div>
-
-		<div class="small-8 grid-content">
-			<div ng-hide="equipment.parent_id == 0">
-				<label>Parent Part</label>
-				<a class="secondary button" ui-sref="admin.equipment_details({id: equipment.parent_id})">
-				{{equipment.parent_name}}
-				</a>
-			</div> 
-			<a class="button" ui-sref="admin.equipment_details({id: equipment.id})">Full Details</a>
-		</div>
+			<div class="small-6 grid-content">
+				<label>Model Number</label>
+				<input type="text" placeholder="Model #" 
+   			           ng-disabled="true"
+   			           ng-model-options="{ updateOn: 'default blur', debounce: { 'default': 800, 'blur': 0 } }"
+			           ng-change="adminEquipmentCtrl.changed(equipment)"
+				       ng-model="equipment.modelno">
+			</div>
+			<div class="small-6 grid-content">
+				<label>Serial Number</label>
+				<input type="text" placeholder="Serial #" 
+   			           ng-disabled="true"
+   			           ng-model-options="{ updateOn: 'default blur', debounce: { 'default': 800, 'blur': 0 } }"
+			           ng-change="adminEquipmentCtrl.changed(equipment)"
+				       ng-model="equipment.serialno">
+			</div>
+			<div class="small-12 grid-content">
+				<a class="button" ui-sref="admin.equipment_details({id: equipment.id})">Full Details</a>
+			</div>
 
 		</div>
 

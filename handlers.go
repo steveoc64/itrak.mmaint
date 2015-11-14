@@ -198,16 +198,16 @@ func getVendors(c *echo.Context) error {
 // Logic for handling the Equipment table
 
 type equipmentType struct {
-	ID        string
-	Name      string
-	Descr     string
-	Comments  string
-	Modelno   string
-	Serialno  string
-	Location  string
-	Parent_id string
-	Category  string
-	Vendor    string
+	ID        string `json:"id"`
+	Name      string `json:"name"`
+	Descr     string `json:"descr"`
+	Comments  string `json:"comments"`
+	Modelno   string `json:"modelno"`
+	Serialno  string `json:"serialno"`
+	Location  string `json:"location"`
+	Parent_id string `json:"parent_id"`
+	Category  string `json:"category"`
+	Vendor    string `json:"vendor"`
 }
 
 func getAllEquipment(c *echo.Context) error {
@@ -279,7 +279,7 @@ func saveEquipment(c *echo.Context) error {
 	}
 	log.Println(eq)
 
-	sqlResult, err := ExecDb(db,
+	_, err := ExecDb(db,
 		`update equipment 
 			set name=$2,
 			    descr=$3,
@@ -304,5 +304,5 @@ func saveEquipment(c *echo.Context) error {
 		log.Println(err.Error())
 	}
 
-	return c.JSON(http.StatusOK, sqlResult)
+	return c.JSON(http.StatusOK, eq)
 }

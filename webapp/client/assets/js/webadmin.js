@@ -99,6 +99,10 @@
 
       getSiteMapURI: function(m) {
         return "https://www.google.com/maps?q="+encodeURIComponent(m)
+      },
+
+      changed: function(v) {
+        console.log('Changed',v)
       }
 
     }) // extend this 
@@ -147,10 +151,9 @@
       vendors: vendors,
       subparts: subparts,
 
-      save: function() {
+      changed: function() {
         equipment.$save()
         FoundationApi.publish('equipment','reload')
-        $state.go('admin.equipment')
       },
       getSiteMapURI: function(m) {
         return "https://www.google.com/maps?q="+encodeURIComponent(m)
