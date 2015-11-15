@@ -76,8 +76,8 @@
               {sref: "admin.spares", title: "Spares"},
               {sref: "admin.consumables", title: "Consumables"},
               {sref: "admin.equiptypes", title: "Equipment Types"},
-              {sref: "admin.workorder", title: "WorkOrders"},
               {sref: "admin.task", title: "Tasks"},
+              {sref: "admin.workorder", title: "WorkOrders"},
               {sref: "admin.vendor", title: "Vendors"},
             ]
             break
