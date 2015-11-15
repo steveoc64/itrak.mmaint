@@ -35,6 +35,10 @@
 			       ng-change="adminSiteCtrl.changed(site)"
 				   ng-model="site.contact">
 		</div>
+		<div class="small-12 grid-content">
+			<a class="button" ui-sref="admin.sitetask({id: site.id})">Stoppage Tasks</a>
+		</div>
+
 		</div>
 
 		</zf-accordion-item>

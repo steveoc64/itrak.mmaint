@@ -64,6 +64,11 @@ func loadHandlers(e *echo.Echo) {
 	e.Get("/equiptype", getAllEquipTypes)
 	e.Get("/equiptype/:id", getEquipType)
 	e.Post("/equiptype/:id", saveEquipType)
+
+	e.Get("/task", getAllTask)
+	e.Get("/sitetask/:id", getSiteTasks)
+	e.Get("/task/:id", getTask)
+	e.Post("/task/:id", saveTask)
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////
@@ -556,7 +561,7 @@ func saveEquipType(c *echo.Context) error {
 		log.Println(binderr.Error())
 		return binderr
 	}
-	log.Println(et)
+	//log.Println(et)
 
 	_, err := ExecDb(db,
 		`update equip_type
@@ -574,4 +579,131 @@ func saveEquipType(c *echo.Context) error {
 	}
 
 	return c.JSON(http.StatusOK, et)
+}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////
+// Logic for handling the Task table
+
+type TaskType struct {
+	ID            string `json:"id"`
+	TaskName      string `json:"taskname"`
+	Description   string `json:"description"`
+	StartDate     string `json:"startdate"`
+	StartTime     string `json:"starttime"`
+	Duration      string `json:"duration"`
+	LabourCost    string `json:"labour_cost"`
+	MaterialCost  string `json:"material_cost"`
+	OtherCost     string `json:"othercost"`
+	Priority      string `json:"priority"`
+	Category      string `json:"category"`
+	Class         string `json:"class"`
+	TaskFrequency string `json:"taskfrequency"`
+	Instructions  string `json:"instructions"`
+}
+
+func getAllTask(c *echo.Context) error {
+	sqlResult, err := SQLMap(db, `select 
+		id,taskname,description,
+		to_char(startdate,'YYYY-MM-DD') as startdate,
+		to_char(starttime,'HH:MI:SS') as starttime,
+		duration,labour_cost,material_cost,othercost,
+		priority,category,class,taskfrequency,instructions
+		from tasks order by startdate desc limit 50`)
+	if err != nil {
+		log.Println(err.Error())
+	}
+	return c.JSON(http.StatusOK, sqlResult)
+}
+
+func getSiteTasks(c *echo.Context) error {
+	id, iderr := strconv.Atoi(c.Param("id"))
+	if iderr != nil {
+		return c.String(http.StatusNotAcceptable, "Invalid ID")
+	}
+
+	sqlResult, err := SQLMap(db, `select 
+		id,taskname,description,
+		to_char(startdate,'YYYY-MM-DD') as startdate,
+		to_char(starttime,'HH:MI:SS') as starttime,
+		duration,labour_cost,material_cost,othercost,
+		priority,category,class,taskfrequency,instructions
+		from tasks 
+		where site=$1
+		order by startdate desc limit 50`, id)
+
+	if err != nil {
+		log.Println(err.Error())
+	}
+	return c.JSON(http.StatusOK, sqlResult)
+}
+
+func getTask(c *echo.Context) error {
+	id, iderr := strconv.Atoi(c.Param("id"))
+	if iderr != nil {
+		return c.String(http.StatusNotAcceptable, "Invalid ID")
+	}
+
+	sqlResult, err := SQLMap(db, `select 
+		id,taskname,description,
+		to_char(startdate,'YYYY-MM-DD') as startdate,
+		to_char(starttime,'HH:MI:SS') as starttime,
+		duration,labour_cost,material_cost,othercost,
+		priority,category,class,taskfrequency,instructions
+		from tasks where id=$1 order by startdate desc`, id)
+	if err != nil {
+		log.Println(err.Error())
+	}
+
+	return c.JSON(http.StatusOK, sqlResult)
+}
+
+func saveTask(c *echo.Context) error {
+	id, iderr := strconv.Atoi(c.Param("id"))
+	if iderr != nil {
+		return c.String(http.StatusNotAcceptable, "Invalid ID")
+	}
+
+	task := new(TaskType)
+	if binderr := c.Bind(task); binderr != nil {
+		log.Println(binderr.Error())
+		return binderr
+	}
+	log.Println(task)
+
+	_, err := ExecDb(db,
+		`update tasks
+			set taskname=$2,
+			    description=$3,
+			    startdate=$4,
+			    starttime=$5,
+			    duration=$6,
+			    labourcost=$7,
+			    materialcost=$8,
+			    othercost=$9,
+			    priority=$10,
+			    category=$11,
+			    class=$12,
+			    taskfrequency=$13,
+			    instructions=$14,
+			where id=$1`,
+		id,
+		task.TaskName,
+		task.Description,
+		task.StartDate,
+		task.StartTime,
+		task.Duration,
+		task.LabourCost,
+		task.MaterialCost,
+		task.OtherCost,
+		task.Priority,
+		task.Category,
+		task.Class,
+		task.TaskFrequency,
+		task.Instructions)
+
+	if err != nil {
+		log.Println(err.Error())
+	}
+
+	return c.JSON(http.StatusOK, task)
 }

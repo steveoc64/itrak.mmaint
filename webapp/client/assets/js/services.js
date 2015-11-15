@@ -49,6 +49,11 @@
     return $resource(ServerName+'/task/:id');
   })
 
+  // Site Tasks
+  angular.module('itrak').factory('SiteTasks', function($resource, ServerName){
+    return $resource(ServerName+'/sitetask/:id', {id: '@id'});
+  })
+
   // Vendors
   angular.module('itrak').factory('Vendors', function($resource, ServerName){
     return $resource(ServerName+'/vendors/:id');

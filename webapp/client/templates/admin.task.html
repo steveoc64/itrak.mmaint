@@ -1,0 +1,115 @@
+<div class="grid-block">
+
+  <h3 class="grid-content small-12">Stoppage Tasks</h3>
+
+	<zf-accordion class="grid-content small-12">
+		<zf-accordion-item 
+		    title="{{task.taskname}}"
+		    ng-repeat="task in adminTaskCtrl.tasks">
+
+		<div class="grid-block align-right">
+			<div class="small-12 grid-content">
+				<label>Name / Description</label>
+				<input type="text" placeholder="Name" 
+   			           ng-model-options="{ updateOn: 'default blur', debounce: { 'default': 800, 'blur': 0 } }"
+			           ng-change="adminTaskCtrl.changed(task)"
+					   ng-model="task.taskname">
+				<input type="text" placeholder="Description" 
+   			           ng-model-options="{ updateOn: 'default blur', debounce: { 'default': 800, 'blur': 0 } }"
+			           ng-change="adminTaskCtrl.changed(task)"
+				       ng-model="task.description">
+				<div class="thumbnails">
+				<p ng-bind-html="tasks.comments | unsafe"></p>
+				</div>
+			</div>
+
+			<div class="small-4 grid-content">
+				<label>Start Date</label>
+				<input type="text" placeholder="StartDate" 
+   			           ng-model-options="{ updateOn: 'default blur', debounce: { 'default': 800, 'blur': 0 } }"
+			           ng-change="adminTaskCtrl.changed(task)"
+				       ng-model="task.startdate">
+			</div>
+			<div class="small-4 grid-content">
+				<label>Start Time</label>
+				<input type="text" placeholder="StartTime" 
+   			           ng-model-options="{ updateOn: 'default blur', debounce: { 'default': 800, 'blur': 0 } }"
+			           ng-change="adminTaskCtrl.changed(task)"
+				       ng-model="task.starttime">
+			</div>
+			<div class="small-4 grid-content">
+				<label>Duration</label>
+				<input type="text" placeholder="Duration" 
+   			           ng-model-options="{ updateOn: 'default blur', debounce: { 'default': 800, 'blur': 0 } }"
+			           ng-change="adminTaskCtrl.changed(task)"
+				       ng-model="task.duration">
+			</div>
+			
+			<div class="small-4 grid-content">
+				<label>Labour Cost</label>
+				<input type="text" placeholder="Labour" 
+   			           ng-model-options="{ updateOn: 'default blur', debounce: { 'default': 800, 'blur': 0 } }"
+			           ng-change="adminTaskCtrl.changed(task)"
+				       ng-model="task.labour_cost">
+			</div>
+			<div class="small-4 grid-content">
+				<label>Material Cost</label>
+				<input type="text" placeholder="Materials" 
+   			           ng-model-options="{ updateOn: 'default blur', debounce: { 'default': 800, 'blur': 0 } }"
+			           ng-change="adminTaskCtrl.changed(task)"
+				       ng-model="task.material_cost">
+			</div>
+			<div class="small-4 grid-content">
+				<label>Other Costs</label>
+				<input type="text" placeholder="Other Costs" 
+   			           ng-model-options="{ updateOn: 'default blur', debounce: { 'default': 800, 'blur': 0 } }"
+			           ng-change="adminTaskCtrl.changed(task)"
+				       ng-model="task.other_cost">
+			</div>
+
+			<div class="small-3 grid-content">
+				<label>Priority</label>
+				<input type="text" placeholder="Priority" 
+   			           ng-model-options="{ updateOn: 'default blur', debounce: { 'default': 800, 'blur': 0 } }"
+			           ng-change="adminTaskCtrl.changed(task)"
+				       ng-model="task.priority">
+			</div>
+			<div class="small-3 grid-content">
+				<label>Category</label>
+				<input type="text" placeholder="Category" 
+   			           ng-model-options="{ updateOn: 'default blur', debounce: { 'default': 800, 'blur': 0 } }"
+			           ng-change="adminTaskCtrl.changed(task)"
+				       ng-model="task.category">
+			</div>
+			<div class="small-3 grid-content">
+				<label>Class</label>
+				<input type="text" placeholder="Class" 
+   			           ng-model-options="{ updateOn: 'default blur', debounce: { 'default': 800, 'blur': 0 } }"
+			           ng-change="adminTaskCtrl.changed(task)"
+				       ng-model="task.class">
+			</div>
+			<div class="small-3 grid-content">
+				<label>Frequency</label>
+				<input type="text" placeholder="Frequency" 
+   			           ng-model-options="{ updateOn: 'default blur', debounce: { 'default': 800, 'blur': 0 } }"
+			           ng-change="adminTaskCtrl.changed(task)"
+				       ng-model="task.taskfrequency">
+			</div>
+			<div class="small-12 grid-content">
+				<label>Instructions</label>
+				<input type="text" placeholder="Instructions" 
+   			           ng-model-options="{ updateOn: 'default blur', debounce: { 'default': 800, 'blur': 0 } }"
+			           ng-change="adminTaskCtrl.changed(task)"
+				       ng-model="task.instructions">
+			</div>
+			<div class="thumbnails">
+				<p ng-bind-html="task.instructions | unsafe"></p>
+			</div>
+
+		</div>
+
+		</zf-accordion-item>
+	</zf-accordion>
+
+
+</div>

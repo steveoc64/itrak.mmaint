@@ -149,6 +149,31 @@
 
             }
           })
+          .state('admin.task',{
+            url: '/task',
+            templateUrl: 'templates/admin.task.html',
+            controller: 'adminTaskCtrl',
+            controllerAs: 'adminTaskCtrl',
+            resolve: {
+              tasks: function(Tasks) {
+                return Tasks.query()
+              }
+            }
+          })
+          .state('admin.sitetask',{
+            url: '/sitetask/:id',
+            templateUrl: 'templates/admin.sitetask.html',
+            controller: 'adminSiteTaskCtrl',
+            controllerAs: 'adminSiteTaskCtrl',
+            resolve: {
+              site: function($stateParams,Sites) {
+                return Sites.get({id: $stateParams.id})
+              },
+              tasks: function($stateParams,SiteTasks) {
+                return SiteTasks.query({id: $stateParams.id})
+              }
+            }
+          })
           .state('admin.equipment_details',{
             url: '/equipdetails/:id',
             templateUrl: 'templates/admin.equipment_details.html',

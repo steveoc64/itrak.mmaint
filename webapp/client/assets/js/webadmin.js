@@ -345,4 +345,53 @@
     });  // Extend this  
   });
 
+  // Admin version of Task List
+  angular.module('itrak')
+    .controller('adminTaskCtrl', function(
+      $state, $stateParams,
+      FoundationApi,
+      loginState,
+      tasks
+    ){     
+
+    console.log('Running Admin Task controller',$stateParams)
+    if (!loginState.loggedIn) {
+      $state.go('login')
+    }
+
+    angular.extend(this, {
+      tasks: tasks,
+
+      changed: function(task) {
+        console.log('Task changed',site.id)
+        task.$save({id: task.id})
+        FoundationApi.publish('tasks','reload')
+      },
+    });  // Extend this  
+  });
+
+  // Admin version of Site Task List
+  angular.module('itrak')
+    .controller('adminSiteTaskCtrl', function(
+      $state, $stateParams,
+      FoundationApi,
+      loginState,
+      tasks, site
+    ){     
+
+    console.log('Running Admin Site Task controller',$stateParams)
+    if (!loginState.loggedIn) {
+      $state.go('login')
+    }
+
+    angular.extend(this, {
+      tasks: tasks,
+      site: site,
+
+      changed: function(task) {
+        console.log('Something changed ...')
+      },
+    });  // Extend this  
+  });
+
 })();
