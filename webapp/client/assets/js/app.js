@@ -131,6 +131,24 @@
 
             }
           })
+          .state('admin.equiptypes',{
+            url: '/equiptypes',
+            templateUrl: 'templates/admin.equiptypes.html',
+            controller: 'adminEquipTypesCtrl',
+            controllerAs: 'adminEquipTypesCtrl',
+            resolve: {
+              equiptypes: function(EquipTypes) {
+                return EquipTypes.query()
+              },
+              vendors: function(Vendors) {
+                return Vendors.query()
+              },
+              sites: function(Sites) {
+                return Sites.query()
+              }
+
+            }
+          })
           .state('admin.equipment_details',{
             url: '/equipdetails/:id',
             templateUrl: 'templates/admin.equipment_details.html',
@@ -146,6 +164,17 @@
               sites: function(Sites) {
                 return Sites.query()
               },
+              vendors: function(Vendors) {
+                return Vendors.query()
+              }
+            }
+          })
+          .state('admin.vendor',{
+            url: '/vendor/:id',
+            templateUrl: 'templates/admin.vendor.html',
+            controller: 'adminVendorCtrl',
+            controllerAs: 'adminVendorCtrl',
+            resolve: {
               vendors: function(Vendors) {
                 return Vendors.query()
               }

@@ -1,0 +1,89 @@
+<div class="grid-block">
+
+  <h3 class="grid-content small-12">List of Vendors</h3>
+
+	<zf-accordion class="grid-content small-12">
+		<zf-accordion-item title="{{vendor.name}}" ng-repeat="vendor in adminVendorCtrl.vendors">
+
+		<div class="grid-block">
+		<div class="small-12 grid-content">
+		<label>Name 
+			<input type="text" placeholder="Name" 
+			       ng-model-options="{ updateOn: 'default blur', debounce: { 'default': 800, 'blur': 0 } }"
+			       ng-change="adminVendorCtrl.changed(vendor)"
+				   ng-model="vendor.name">
+		</label>
+		</div>
+		<div class="small-12 grid-content">
+		<label>Description 
+			<input type="text" placeholder="Description" 
+			       ng-model-options="{ updateOn: 'default blur', debounce: { 'default': 800, 'blur': 0 } }"
+			       ng-change="adminVendorCtrl.changed(vendor)"
+				   ng-model="vendor.descr">
+		</label>
+		</div>
+		<div class="small-12 grid-content">
+		<label>Comments 
+			<input type="text" placeholder="Comments" 
+			       ng-model-options="{ updateOn: 'default blur', debounce: { 'default': 800, 'blur': 0 } }"
+			       ng-change="adminVendorCtrl.changed(vendor)"
+				   ng-model="vendor.comments">
+		</label>
+		</div>
+		<div class="small-12 grid-content">
+		<label>Account 
+			<input type="text" placeholder="Account" 
+			       ng-model-options="{ updateOn: 'default blur', debounce: { 'default': 800, 'blur': 0 } }"
+			       ng-change="adminVendorCtrl.changed(vendor)"
+				   ng-model="vendor.account">
+		</label>
+		</div>
+		<div class="small-6 grid-content">
+		<label>Main Contact
+			<input type="text" placeholder="Main Contact" 
+			       ng-model-options="{ updateOn: 'default blur', debounce: { 'default': 800, 'blur': 0 } }"
+			       ng-change="adminVendorCtrl.changed(vendor)"
+				   ng-model="vendor.maincontact">
+		</label>
+		</div>
+		<div class="small-6 grid-content">
+		<label>Service Contact
+			<input type="text" placeholder="Service Contact" 
+			       ng-model-options="{ updateOn: 'default blur', debounce: { 'default': 800, 'blur': 0 } }"
+			       ng-change="adminVendorCtrl.changed(vendor)"
+				   ng-model="vendor.servicecontact">
+		</label>
+		</div>
+		<div class="small-6 grid-content">
+		<label>Parts Contact
+			<input type="text" placeholder="Parts Contact" 
+			       ng-model-options="{ updateOn: 'default blur', debounce: { 'default': 800, 'blur': 0 } }"
+			       ng-change="adminVendorCtrl.changed(vendor)"
+				   ng-model="vendor.partscontact">
+		</label>
+		</div>
+		<div class="small-6 grid-content">
+		<label>Other Contact
+			<input type="text" placeholder="Other Contact" 
+			       ng-model-options="{ updateOn: 'default blur', debounce: { 'default': 800, 'blur': 0 } }"
+			       ng-change="adminVendorCtrl.changed(vendor)"
+				   ng-model="vendor.othercontact">
+		</label>
+		</div>
+		<div class="small-4 grid-content">
+			<label>Rating</label>
+			<select ng-model="vendor.rating"
+			        ng-model-options="{ updateOn: 'default blur', debounce: { 'default': 800, 'blur': 0 } }"
+			        ng-change="adminVendorCtrl.changed(vendor)">
+			<option ng-repeat="vr in adminVendorCtrl.ratings" 
+					ng-selected="vr.id == vendor.rating"
+				    value="{{vr.id}}">{{vr.name}}</option>
+			</select>
+		</div>
+
+		</div>
+
+		</zf-accordion-item>
+	</zf-accordion>
+
+</div>

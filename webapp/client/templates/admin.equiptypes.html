@@ -1,0 +1,42 @@
+<div class="grid-block">
+
+  <h3 class="grid-content small-12">Equipment Types</h3>
+
+	<zf-accordion class="grid-content small-12">
+		<zf-accordion-item 
+		    title="{{equiptype.name}}"
+		    ng-repeat="equiptype in adminEquipTypesCtrl.equiptypes">
+		<div class="grid-block align-right">
+			<div class="small-12 grid-content">
+				<label>Name / Description</label>
+				<input type="text" placeholder="Name" 
+   			           ng-model-options="{ updateOn: 'default blur', debounce: { 'default': 800, 'blur': 0 } }"
+			           ng-change="adminEquipTypesCtrl.changed(equiptype)"
+					   ng-model="equiptype.name">
+			</div>
+
+			<div class="small-6 grid-content">
+				<label>Consumables</label>
+				<input type="checkbox" 
+					ng-model="equiptype.is_consumable"
+					ng-true-value="'true'"
+					ng-true-value="'false'"
+					ng-change="adminEquipTypesCtrl.changed(equiptype)">
+
+			</div>
+			<div class="small-6 grid-content">
+				<label>Capital Asset</label>
+				<input type="checkbox" 
+					ng-model="equiptype.is_asset"
+					ng-true-value="'true'"
+					ng-true-value="'false'"
+					ng-change="adminEquipTypesCtrl.changed(equiptype)">
+
+			</div>
+		</div>
+
+		</zf-accordion-item>
+	</zf-accordion>
+
+
+</div>

@@ -156,7 +156,7 @@
 
   })
 
-  // Admin version of Spares List
+  // Admin version of Consumables List
   angular.module('itrak')
     .controller('adminConsumablesCtrl', function(
       $state, $stateParams,
@@ -183,6 +183,67 @@
       changed: function(part) {
         console.log('Changed',part.id)
         part.$save({id: part.id})
+      }
+
+    }) // extend this 
+
+  })
+
+  // Admin version of EquipTypes List
+  angular.module('itrak')
+    .controller('adminEquipTypesCtrl', function(
+      $state, $stateParams,
+      FoundationApi,
+      loginState,    
+      equiptypes
+    ){     
+
+    console.log('Running Admin EquipTypes controller',$stateParams)
+
+    if (!loginState.loggedIn) {
+      $state.go('login')
+    }
+
+    angular.extend(this, {
+      equiptypes: equiptypes,
+
+      changed: function(et) {
+        console.log('Changed',et)
+        et.$save({id: et.id})
+      }
+
+    }) // extend this 
+
+  })
+
+  // Admin version of Vendor List
+  angular.module('itrak')
+    .controller('adminVendorCtrl', function(
+      $state, $stateParams,
+      FoundationApi,
+      loginState,    
+      vendors
+    ){     
+
+    console.log('Running Admin EquipTypes controller',$stateParams)
+
+    if (!loginState.loggedIn) {
+      $state.go('login')
+    }
+
+    angular.extend(this, {
+      vendors: vendors,
+      ratings: [
+        {id: 1, name: 'A+'},
+        {id: 2, name: 'Good'},
+        {id: 3, name: 'Average'},
+        {id: 4, name: 'Poor'},
+        {id: 5, name: 'Avoid'},
+      ],
+
+      changed: function(vendor) {
+        console.log('Changed',vendor)
+        vendor.$save({id: vendor.id})
       }
 
     }) // extend this 

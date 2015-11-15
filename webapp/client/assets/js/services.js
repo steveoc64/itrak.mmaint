@@ -28,9 +28,15 @@
   angular.module('itrak').factory('Spares', function($resource, ServerName){
     return $resource(ServerName+'/spares/:id', {id: '@id'});
   })
+
   // Consumables
   angular.module('itrak').factory('Consumables', function($resource, ServerName){
     return $resource(ServerName+'/consumables/:id', {id: '@id'});
+  })
+
+  // EquipTypes
+  angular.module('itrak').factory('EquipTypes', function($resource, ServerName){
+    return $resource(ServerName+'/equiptype/:id', {id: '@id'});
   })
 
   // WorkOrders

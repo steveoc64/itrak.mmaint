@@ -45,7 +45,9 @@ func loadHandlers(e *echo.Echo) {
 	e.Post("/site/:id", saveSite)
 
 	e.Get("/roles", getRoles)
-	e.Get("/vendors", getVendors)
+
+	e.Get("/vendors", getAllVendors)
+	e.Post("/vendors/:id", saveVendor)
 
 	// Equipment Related functions
 	e.Get("/equipment", getAllEquipment)
@@ -58,6 +60,10 @@ func loadHandlers(e *echo.Echo) {
 	e.Get("/consumables", getAllConsumables)
 	e.Get("/consumables/:id", getEquipment)
 	e.Post("/consumables/:id", saveEquipment)
+
+	e.Get("/equiptype", getAllEquipTypes)
+	e.Get("/equiptype/:id", getEquipType)
+	e.Post("/equiptype/:id", saveEquipType)
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////
@@ -300,10 +306,65 @@ func getRoles(c *echo.Context) error {
 /////////////////////////////////////////////////////////////////////////////////////////////////
 // Logic for handling the Vendors table
 
-func getVendors(c *echo.Context) error {
+type VendorType struct {
+	ID             string `json:"id"`
+	Name           string `json:"name"`
+	Descr          string `json:"descr"`
+	Comments       string `json:"comments"`
+	Account        string `json:"account"`
+	MainContact    string `json:"maincontact"`
+	ServiceContact string `json:"servicecontact"`
+	PartsContact   string `json:"partscontact"`
+	OtherContact   string `json:"othercontact"`
+	Rating         string `json:"rating"`
+}
+
+func getAllVendors(c *echo.Context) error {
 	sqlResult, _ := SQLMap(db,
 		"select * from vendor order by id")
 	return c.JSON(http.StatusOK, sqlResult)
+}
+
+func saveVendor(c *echo.Context) error {
+	id, iderr := strconv.Atoi(c.Param("id"))
+	if iderr != nil {
+		return c.String(http.StatusNotAcceptable, "Invalid ID")
+	}
+
+	vendor := new(VendorType)
+	if binderr := c.Bind(vendor); binderr != nil {
+		log.Println(binderr.Error())
+		return binderr
+	}
+
+	_, err := ExecDb(db,
+		`update vendor
+			set name=$2,
+			    descr=$3,
+			    comments=$4,
+			    account=$5,
+			    maincontact=$6,
+			    servicecontact=$7,
+			    partscontact=$8,
+			    othercontact=$9,
+			    rating=$10
+			where id=$1`,
+		id,
+		vendor.Name,
+		vendor.Descr,
+		vendor.Comments,
+		vendor.Account,
+		vendor.MainContact,
+		vendor.ServiceContact,
+		vendor.PartsContact,
+		vendor.OtherContact,
+		vendor.Rating)
+
+	if err != nil {
+		log.Println(err.Error())
+	}
+
+	return c.JSON(http.StatusOK, vendor)
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////
@@ -450,4 +511,67 @@ func saveEquipment(c *echo.Context) error {
 	}
 
 	return c.JSON(http.StatusOK, eq)
+}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////
+// Logic for handling the Equipment table
+
+type EquipType struct {
+	ID         string `json:"id"`
+	Name       string `json:"name"`
+	Consumable bool   `json:"is_consumable"`
+	Asset      bool   `json:"is_asset"`
+}
+
+func getAllEquipTypes(c *echo.Context) error {
+	sqlResult, err := SQLMap(db, `select * from equip_type`)
+	if err != nil {
+		log.Println(err.Error())
+	}
+	return c.JSON(http.StatusOK, sqlResult)
+}
+
+func getEquipType(c *echo.Context) error {
+	id, iderr := strconv.Atoi(c.Param("id"))
+	if iderr != nil {
+		return c.String(http.StatusNotAcceptable, "Invalid ID")
+	}
+
+	sqlResult, err := SQLMapOne(db, `select * from equip_type where id=$1`, id)
+	if err != nil {
+		log.Println(err.Error())
+	}
+
+	return c.JSON(http.StatusOK, sqlResult)
+}
+
+func saveEquipType(c *echo.Context) error {
+	id, iderr := strconv.Atoi(c.Param("id"))
+	if iderr != nil {
+		return c.String(http.StatusNotAcceptable, "Invalid ID")
+	}
+
+	et := new(EquipType)
+	if binderr := c.Bind(et); binderr != nil {
+		log.Println(binderr.Error())
+		return binderr
+	}
+	log.Println(et)
+
+	_, err := ExecDb(db,
+		`update equip_type
+			set name=$2,
+			    is_consumable=$3,
+			    is_asset=$4
+			where id=$1`,
+		id,
+		et.Name,
+		et.Consumable,
+		et.Asset)
+
+	if err != nil {
+		log.Println(err.Error())
+	}
+
+	return c.JSON(http.StatusOK, et)
 }
