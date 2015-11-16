@@ -4,7 +4,7 @@
 
 	<zf-accordion class="grid-content small-12">
 		<zf-accordion-item 
-		    title="{{task.taskname}}"
+		    title="{{task.startdate}} ... {{task.taskname}} ... {{task.class}}"
 		    ng-repeat="task in adminTaskCtrl.tasks">
 
 		<div class="grid-block align-right">
@@ -102,9 +102,19 @@
 			           ng-change="adminTaskCtrl.changed(task)"
 				       ng-model="task.instructions">
 			</div>
-			<div class="thumbnails">
-				<p ng-bind-html="task.instructions | unsafe"></p>
+			<div class="grid-block">
+				<div>
+				<a class="button secondary" 
+				   ng-click="adminTaskCtrl.showInstructions = !adminTaskCtrl.showInstructions">Show Instructions</a>
+				<div class="thumbnails" ng-show="adminTaskCtrl.showInstructions">
+					<p ng-bind-html="task.instructions | unsafe"></p>
+				</div>				
+				</div>
 			</div>
+			<div class="small-12 grid-content">
+				<a class="button" ui-sref="admin.sitetask({id: task.site})">All Tasks for {{task.site_name}}</a>
+			</div>
+
 
 		</div>
 

@@ -603,12 +603,15 @@ type TaskType struct {
 
 func getAllTask(c *echo.Context) error {
 	sqlResult, err := SQLMap(db, `select 
-		id,taskname,description,
-		to_char(startdate,'YYYY-MM-DD') as startdate,
-		to_char(starttime,'HH:MI:SS') as starttime,
-		duration,labour_cost,material_cost,othercost,
-		priority,category,class,taskfrequency,instructions
-		from tasks order by startdate desc limit 50`)
+		t.id,taskname,t.description,
+		to_char(t.startdate,'YYYY-MM-DD') as startdate,
+		to_char(t.starttime,'HH:MI:SS') as starttime,
+		t.duration,t.labour_cost,t.material_cost,t.othercost,
+		t.priority,t.category,t.class,t.taskfrequency,t.instructions,
+		t.site,site.name as site_name
+		from tasks t
+			left outer join site on (site.id = t.site)
+		order by t.startdate desc limit 50`)
 	if err != nil {
 		log.Println(err.Error())
 	}
@@ -626,7 +629,7 @@ func getSiteTasks(c *echo.Context) error {
 		to_char(startdate,'YYYY-MM-DD') as startdate,
 		to_char(starttime,'HH:MI:SS') as starttime,
 		duration,labour_cost,material_cost,othercost,
-		priority,category,class,taskfrequency,instructions
+		priority,category,class,taskfrequency,instructions,site
 		from tasks 
 		where site=$1
 		order by startdate desc limit 50`, id)
@@ -644,12 +647,15 @@ func getTask(c *echo.Context) error {
 	}
 
 	sqlResult, err := SQLMap(db, `select 
-		id,taskname,description,
-		to_char(startdate,'YYYY-MM-DD') as startdate,
-		to_char(starttime,'HH:MI:SS') as starttime,
-		duration,labour_cost,material_cost,othercost,
-		priority,category,class,taskfrequency,instructions
-		from tasks where id=$1 order by startdate desc`, id)
+		t.id,t.taskname,t.description,
+		to_char(t.startdate,'YYYY-MM-DD') as startdate,
+		to_char(t.starttime,'HH:MI:SS') as starttime,
+		t.duration,t.labour_cost,t.material_cost,t.othercost,
+		t.priority,t.category,t.class,t.taskfrequency,t.instructions,
+		t.site,site.name as site_name
+		from tasks t 
+			left outer join sites on (sites.id = t.site)
+		where t.id=$1 order by t.startdate desc`, id)
 	if err != nil {
 		log.Println(err.Error())
 	}

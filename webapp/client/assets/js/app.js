@@ -205,6 +205,44 @@
               }
             }
           })
+          .state('admin.workorder',{
+            url: '/workorder',
+            controller: 'workerCtrl',
+            controllerAs: 'ctrl',
+            template: '<h3>Work Orders</h> ... tbd'
+          })
+        .state('worker',{
+          url: '/worker',
+          templateUrl: 'templates/worker.html'
+        })
+          .state('worker.dashboard',{
+            url: '/dashboard',
+            template: '<h3>Worker Dashboard</h> ... tbd'
+          })
+          .state('worker.estop',{
+            url: '/estop',
+            template: '<h3>Machine Stoppage !</h> ... tbd'
+          })
+          .state('worker.pstop',{
+            url: '/pstop',
+            template: '<h3>Preventative Maintenance</h> ... tbd'
+          })
+          .state('worker.equip',{
+            url: '/equip',
+            template: '<h3>Equipment List</h> ... tbd'
+          })
+          .state('worker.task',{
+            url: '/task',
+            template: '<h3>Uncompleted Tasks for this Site</h> ... tbd'
+          })
+          .state('worker.spares',{
+            url: '/spares',
+            template: '<h3>Spare Parts at this Site</h> ... tbd'
+          })
+          .state('worker.reports',{
+            url: '/reports',
+            template: '<h3>Maintenance Reports</h> ... tbd'
+          })
   }
 
   function run($rootScope) {

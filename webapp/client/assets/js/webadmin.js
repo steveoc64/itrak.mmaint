@@ -361,6 +361,7 @@
 
     angular.extend(this, {
       tasks: tasks,
+      showInstructions: false,
 
       changed: function(task) {
         console.log('Task changed',site.id)

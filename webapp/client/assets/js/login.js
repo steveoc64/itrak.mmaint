@@ -38,7 +38,6 @@
               {sref: "worker.estop", title: "BreakDown !"},
               {sref: "worker.pstop", title: "Preventative"},
               {sref: "worker.equip", title: "Equipment"},
-              {sref: "worker.workorder", title: "WorkOrders"},
               {sref: "worker.task", title: "Tasks"},
               {sref: "worker.spares", title: "Spares"},
               {sref: "worker.reports", title: "Reports"}
@@ -49,7 +48,7 @@
             this.menu = [
               {sref: "vendor.dashboard", title: "Dashboard"},
               {sref: "vendor.equip", title: "Equipment"},
-              {sref: "vendor.task", title: "Tasks"},
+              {sref: "vendor.workorder", title: "WorkOrders"},
               {sref: "vendor.spares", title: "Spares"},
               {sref: "vendor.reports", title: "Reports"}
             ]
@@ -61,8 +60,8 @@
               {sref: "sitemgr.estop", title: "BreakDown !"},
               {sref: "sitemgr.pstop", title: "Preventative"},
               {sref: "sitemgr.equip", title: "Equipment"},
-              {sref: "sitemgr.workorder", title: "WorkOrders"},
               {sref: "sitemgr.task", title: "Tasks"},
+              {sref: "sitemgr.workorder", title: "WorkOrders"},
               {sref: "sitemgr.spares", title: "Spares"},
               {sref: "sitemgr.reports", title: "Reports"}
             ]
