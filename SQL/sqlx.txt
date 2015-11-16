@@ -1,0 +1,405 @@
+Constants
+const (
+    UNKNOWN = iota
+    QUESTION
+    DOLLAR
+    NAMED
+)
+Bindvar types supported by Rebind, BindMap and BindStruct.
+
+Variables
+var NameMapper = strings.ToLower
+NameMapper is used to map column names to struct field names. By default, it uses strings.ToLower to lowercase struct field names. It can be set to whatever you want, but it is encouraged to be set before sqlx is used as name-to-field mappings are cached after first use on a type.
+
+func BindNamed
+func BindNamed(bindType int, query string, arg interface{}) (string, []interface{}, error)
+BindNamed binds a struct or a map to a query with named parameters. DEPRECATED: use sqlx.Named` instead of this, it may be removed in future.
+
+func BindType
+func BindType(driverName string) int
+BindType returns the bindtype for a given database given a drivername.
+
+func Get
+func Get(q Queryer, dest interface{}, query string, args ...interface{}) error
+Get does a QueryRow using the provided Queryer, and scans the resulting row to dest. If dest is scannable, the result must only have one column. Otherwise, StructScan is used. Get will return sql.ErrNoRows like row.Scan would.
+
+func In
+func In(query string, args ...interface{}) (string, []interface{}, error)
+In expands slice values in args, returning the modified query string and a new arg list that can be executed by a database. The `query` should use the `?` bindVar. The return value uses the `?` bindVar.
+
+func LoadFile
+func LoadFile(e Execer, path string) (*sql.Result, error)
+LoadFile exec's every statement in a file (as a single call to Exec). LoadFile may return a nil *sql.Result if errors are encountered locating or reading the file at path. LoadFile reads the entire file into memory, so it is not suitable for loading large data dumps, but can be useful for initializing schemas or loading indexes.
+
+FIXME: this does not really work with multi-statement files for mattn/go-sqlite3 or the go-mysql-driver/mysql drivers; pq seems to be an exception here. Detecting this by requiring something with DriverName() and then attempting to split the queries will be difficult to get right, and its current driver-specific behavior is deemed at least not complex in its incorrectness.
+
+func MapScan
+func MapScan(r ColScanner, dest map[string]interface{}) error
+MapScan scans a single Row into the dest map[string]interface{}. Use this to get results for SQL that might not be under your control (for instance, if you're building an interface for an SQL server that executes SQL from input). Please do not use this as a primary interface! This will modify the map sent to it in place, so reuse the same map with care. Columns which occur more than once in the result will overwrite eachother!
+
+func MustExec
+func MustExec(e Execer, query string, args ...interface{}) sql.Result
+MustExec execs the query using e and panics if there was an error.
+
+func Named
+func Named(query string, arg interface{}) (string, []interface{}, error)
+Named takes a query using named parameters and an argument and returns a new query with a list of args that can be executed by a database. The return value uses the `?` bindvar.
+
+func NamedExec
+func NamedExec(e Ext, query string, arg interface{}) (sql.Result, error)
+NamedExec uses BindStruct to get a query executable by the driver and then runs Exec on the result. Returns an error from the binding or the query excution itself.
+
+func Rebind
+func Rebind(bindType int, query string) string
+Rebind a query from the default bindtype (QUESTION) to the target bindtype.
+
+func Select
+func Select(q Queryer, dest interface{}, query string, args ...interface{}) error
+Select executes a query using the provided Queryer, and StructScans each row into dest, which must be a slice. If the slice elements are scannable, then the result set must have only one column. Otherwise, StructScan is used. The *sql.Rows are closed automatically.
+
+func SliceScan
+func SliceScan(r ColScanner) ([]interface{}, error)
+SliceScan a row, returning a []interface{} with values similar to MapScan. This function is primarly intended for use where the number of columns is not known. Because you can pass an []interface{} directly to Scan, it's recommended that you do that as it will not have to allocate new slices per row.
+
+func StructScan
+func StructScan(rows rowsi, dest interface{}) error
+StructScan all rows from an sql.Rows or an sqlx.Rows into the dest slice. StructScan will scan in the entire rows result, so if you need do not want to allocate structs for the entire result, use Queryx and see sqlx.Rows.StructScan. If rows is sqlx.Rows, it will use its mapper, otherwise it will use the default.
+
+type ColScanner
+type ColScanner interface {
+    Columns() ([]string, error)
+    Scan(dest ...interface{}) error
+    Err() error
+}
+ColScanner is an interface used by MapScan and SliceScan
+
+type DB
+type DB struct {
+    *sql.DB
+
+    Mapper *reflectx.Mapper
+    // contains filtered or unexported fields
+}
+DB is a wrapper around sql.DB which keeps track of the driverName upon Open, used mostly to automatically bind named queries using the right bindvars.
+
+func Connect
+func Connect(driverName, dataSourceName string) (*DB, error)
+Connect to a database and verify with a ping.
+
+func MustConnect
+func MustConnect(driverName, dataSourceName string) *DB
+MustConnect connects to a database and panics on error.
+
+func MustOpen
+func MustOpen(driverName, dataSourceName string) *DB
+MustOpen is the same as sql.Open, but returns an *sqlx.DB instead and panics on error.
+
+func NewDb
+func NewDb(db *sql.DB, driverName string) *DB
+NewDb returns a new sqlx DB wrapper for a pre-existing *sql.DB. The driverName of the original database is required for named query support.
+
+func Open
+func Open(driverName, dataSourceName string) (*DB, error)
+Open is the same as sql.Open, but returns an *sqlx.DB instead.
+
+func (*DB) Beginx
+func (db *DB) Beginx() (*Tx, error)
+Beginx begins a transaction and returns an *sqlx.Tx instead of an *sql.Tx.
+
+func (*DB) BindNamed
+func (db *DB) BindNamed(query string, arg interface{}) (string, []interface{}, error)
+BindNamed binds a query using the DB driver's bindvar type.
+
+func (*DB) DriverName
+func (db *DB) DriverName() string
+DriverName returns the driverName passed to the Open function for this DB.
+
+func (*DB) Get
+func (db *DB) Get(dest interface{}, query string, args ...interface{}) error
+Get using this DB.
+
+func (*DB) MapperFunc
+func (db *DB) MapperFunc(mf func(string) string)
+MapperFunc sets a new mapper for this db using the default sqlx struct tag and the provided mapper function.
+
+func (*DB) MustBegin
+func (db *DB) MustBegin() *Tx
+MustBegin starts a transaction, and panics on error. Returns an *sqlx.Tx instead of an *sql.Tx.
+
+func (*DB) MustExec
+func (db *DB) MustExec(query string, args ...interface{}) sql.Result
+MustExec (panic) runs MustExec using this database.
+
+func (*DB) NamedExec
+func (db *DB) NamedExec(query string, arg interface{}) (sql.Result, error)
+NamedExec using this DB.
+
+func (*DB) NamedQuery
+func (db *DB) NamedQuery(query string, arg interface{}) (*Rows, error)
+NamedQuery using this DB.
+
+func (*DB) PrepareNamed
+func (db *DB) PrepareNamed(query string) (*NamedStmt, error)
+PrepareNamed returns an sqlx.NamedStmt
+
+func (*DB) Preparex
+func (db *DB) Preparex(query string) (*Stmt, error)
+Preparex returns an sqlx.Stmt instead of a sql.Stmt
+
+func (*DB) QueryRowx
+func (db *DB) QueryRowx(query string, args ...interface{}) *Row
+QueryRowx queries the database and returns an *sqlx.Row.
+
+func (*DB) Queryx
+func (db *DB) Queryx(query string, args ...interface{}) (*Rows, error)
+Queryx queries the database and returns an *sqlx.Rows.
+
+func (*DB) Rebind
+func (db *DB) Rebind(query string) string
+Rebind transforms a query from QUESTION to the DB driver's bindvar type.
+
+func (*DB) Select
+func (db *DB) Select(dest interface{}, query string, args ...interface{}) error
+Select using this DB.
+
+func (*DB) Unsafe
+func (db *DB) Unsafe() *DB
+Unsafe returns a version of DB which will silently succeed to scan when columns in the SQL result have no fields in the destination struct. sqlx.Stmt and sqlx.Tx which are created from this DB will inherit its safety behavior.
+
+type Execer
+type Execer interface {
+    Exec(query string, args ...interface{}) (sql.Result, error)
+}
+Execer is an interface used by MustExec and LoadFile
+
+type Ext
+type Ext interface {
+    Queryer
+    Execer
+    // contains filtered or unexported methods
+}
+Ext is a union interface which can bind, query, and exec, used by NamedQuery and NamedExec.
+
+type NamedStmt
+type NamedStmt struct {
+    Params      []string
+    QueryString string
+    Stmt        *Stmt
+}
+NamedStmt is a prepared statement that executes named queries. Prepare it how you would execute a NamedQuery, but pass in a struct or map when executing.
+
+func (*NamedStmt) Close
+func (n *NamedStmt) Close() error
+Close closes the named statement.
+
+func (*NamedStmt) Exec
+func (n *NamedStmt) Exec(arg interface{}) (sql.Result, error)
+Exec executes a named statement using the struct passed.
+
+func (*NamedStmt) Get
+func (n *NamedStmt) Get(dest interface{}, arg interface{}) error
+Get using this NamedStmt
+
+func (*NamedStmt) MustExec
+func (n *NamedStmt) MustExec(arg interface{}) sql.Result
+MustExec execs a NamedStmt, panicing on error
+
+func (*NamedStmt) Query
+func (n *NamedStmt) Query(arg interface{}) (*sql.Rows, error)
+Query executes a named statement using the struct argument, returning rows.
+
+func (*NamedStmt) QueryRow
+func (n *NamedStmt) QueryRow(arg interface{}) *Row
+QueryRow executes a named statement against the database. Because sqlx cannot create a *sql.Row with an error condition pre-set for binding errors, sqlx returns a *sqlx.Row instead.
+
+func (*NamedStmt) QueryRowx
+func (n *NamedStmt) QueryRowx(arg interface{}) *Row
+QueryRowx this NamedStmt. Because of limitations with QueryRow, this is an alias for QueryRow.
+
+func (*NamedStmt) Queryx
+func (n *NamedStmt) Queryx(arg interface{}) (*Rows, error)
+Queryx using this NamedStmt
+
+func (*NamedStmt) Select
+func (n *NamedStmt) Select(dest interface{}, arg interface{}) error
+Select using this NamedStmt
+
+func (*NamedStmt) Unsafe
+func (n *NamedStmt) Unsafe() *NamedStmt
+Unsafe creates an unsafe version of the NamedStmt
+
+type Preparer
+type Preparer interface {
+    Prepare(query string) (*sql.Stmt, error)
+}
+Preparer is an interface used by Preparex.
+
+type Queryer
+type Queryer interface {
+    Query(query string, args ...interface{}) (*sql.Rows, error)
+    Queryx(query string, args ...interface{}) (*Rows, error)
+    QueryRowx(query string, args ...interface{}) *Row
+}
+Queryer is an interface used by Get and Select
+
+type Row
+type Row struct {
+    Mapper *reflectx.Mapper
+    // contains filtered or unexported fields
+}
+Row is a reimplementation of sql.Row in order to gain access to the underlying sql.Rows.Columns() data, necessary for StructScan.
+
+func (*Row) Columns
+func (r *Row) Columns() ([]string, error)
+Columns returns the underlying sql.Rows.Columns(), or the deferred error usually returned by Row.Scan()
+
+func (*Row) Err
+func (r *Row) Err() error
+Err returns the error encountered while scanning.
+
+func (*Row) MapScan
+func (r *Row) MapScan(dest map[string]interface{}) error
+MapScan using this Rows.
+
+func (*Row) Scan
+func (r *Row) Scan(dest ...interface{}) error
+Scan is a fixed implementation of sql.Row.Scan, which does not discard the underlying error from the internal rows object if it exists.
+
+func (*Row) SliceScan
+func (r *Row) SliceScan() ([]interface{}, error)
+SliceScan using this Rows.
+
+func (*Row) StructScan
+func (r *Row) StructScan(dest interface{}) error
+StructScan a single Row into dest.
+
+type Rows
+type Rows struct {
+    *sql.Rows
+
+    Mapper *reflectx.Mapper
+    // contains filtered or unexported fields
+}
+Rows is a wrapper around sql.Rows which caches costly reflect operations during a looped StructScan
+
+func NamedQuery
+func NamedQuery(e Ext, query string, arg interface{}) (*Rows, error)
+NamedQuery binds a named query and then runs Query on the result using the provided Ext (sqlx.Tx, sqlx.Db). It works with both structs and with map[string]interface{} types.
+
+func (*Rows) MapScan
+func (r *Rows) MapScan(dest map[string]interface{}) error
+MapScan using this Rows.
+
+func (*Rows) SliceScan
+func (r *Rows) SliceScan() ([]interface{}, error)
+SliceScan using this Rows.
+
+func (*Rows) StructScan
+func (r *Rows) StructScan(dest interface{}) error
+StructScan is like sql.Rows.Scan, but scans a single Row into a single Struct. Use this and iterate over Rows manually when the memory load of Select() might be prohibitive. *Rows.StructScan caches the reflect work of matching up column positions to fields to avoid that overhead per scan, which means it is not safe to run StructScan on the same Rows instance with different struct types.
+
+type Stmt
+type Stmt struct {
+    *sql.Stmt
+
+    Mapper *reflectx.Mapper
+    // contains filtered or unexported fields
+}
+Stmt is an sqlx wrapper around sql.Stmt with extra functionality
+
+func Preparex
+func Preparex(p Preparer, query string) (*Stmt, error)
+Preparex prepares a statement.
+
+func (*Stmt) Get
+func (s *Stmt) Get(dest interface{}, args ...interface{}) error
+Get using the prepared statement.
+
+func (*Stmt) MustExec
+func (s *Stmt) MustExec(args ...interface{}) sql.Result
+MustExec (panic) using this statement. Note that the query portion of the error output will be blank, as Stmt does not expose its query.
+
+func (*Stmt) QueryRowx
+func (s *Stmt) QueryRowx(args ...interface{}) *Row
+QueryRowx using this statement.
+
+func (*Stmt) Queryx
+func (s *Stmt) Queryx(args ...interface{}) (*Rows, error)
+Queryx using this statement.
+
+func (*Stmt) Select
+func (s *Stmt) Select(dest interface{}, args ...interface{}) error
+Select using the prepared statement.
+
+func (*Stmt) Unsafe
+func (s *Stmt) Unsafe() *Stmt
+Unsafe returns a version of Stmt which will silently succeed to scan when columns in the SQL result have no fields in the destination struct.
+
+type Tx
+type Tx struct {
+    *sql.Tx
+
+    Mapper *reflectx.Mapper
+    // contains filtered or unexported fields
+}
+Tx is an sqlx wrapper around sql.Tx with extra functionality
+
+func (*Tx) BindNamed
+func (tx *Tx) BindNamed(query string, arg interface{}) (string, []interface{}, error)
+BindNamed binds a query within a transaction's bindvar type.
+
+func (*Tx) DriverName
+func (tx *Tx) DriverName() string
+DriverName returns the driverName used by the DB which began this transaction.
+
+func (*Tx) Get
+func (tx *Tx) Get(dest interface{}, query string, args ...interface{}) error
+Get within a transaction.
+
+func (*Tx) MustExec
+func (tx *Tx) MustExec(query string, args ...interface{}) sql.Result
+MustExec runs MustExec within a transaction.
+
+func (*Tx) NamedExec
+func (tx *Tx) NamedExec(query string, arg interface{}) (sql.Result, error)
+NamedExec a named query within a transaction.
+
+func (*Tx) NamedQuery
+func (tx *Tx) NamedQuery(query string, arg interface{}) (*Rows, error)
+NamedQuery within a transaction.
+
+func (*Tx) NamedStmt
+func (tx *Tx) NamedStmt(stmt *NamedStmt) *NamedStmt
+NamedStmt returns a version of the prepared statement which runs within a transaction.
+
+func (*Tx) PrepareNamed
+func (tx *Tx) PrepareNamed(query string) (*NamedStmt, error)
+PrepareNamed returns an sqlx.NamedStmt
+
+func (*Tx) Preparex
+func (tx *Tx) Preparex(query string) (*Stmt, error)
+Preparex a statement within a transaction.
+
+func (*Tx) QueryRowx
+func (tx *Tx) QueryRowx(query string, args ...interface{}) *Row
+QueryRowx within a transaction.
+
+func (*Tx) Queryx
+func (tx *Tx) Queryx(query string, args ...interface{}) (*Rows, error)
+Queryx within a transaction.
+
+func (*Tx) Rebind
+func (tx *Tx) Rebind(query string) string
+Rebind a query within a transaction's bindvar type.
+
+func (*Tx) Select
+func (tx *Tx) Select(dest interface{}, query string, args ...interface{}) error
+Select within a transaction.
+
+func (*Tx) Stmtx
+func (tx *Tx) Stmtx(stmt interface{}) *Stmt
+Stmtx returns a version of the prepared statement which runs within a transaction. Provided stmt can be either *sql.Stmt or *sqlx.Stmt.
+
+func (*Tx) Unsafe
+func (tx *Tx) Unsafe() *Tx
+Unsafe returns a version of Tx which will silently succeed to scan when columns in the SQL result have no fields in the destination struct.
