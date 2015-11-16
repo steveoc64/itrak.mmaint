@@ -6,7 +6,8 @@ create table users (
 	name text,
 	address text,
 	email text,
-	sms text
+	sms text,
+	avatar text
 );
 
 drop table if exists site;
@@ -15,7 +16,8 @@ create table site (
 	name text,
 	address text,
 	phone text,
-	fax text
+	fax text,
+	image text
 );
 
 drop table if exists user_role;
@@ -46,7 +48,9 @@ create table doc (
 	sitemgr boolean,
 	contractor boolean,
 	type char(3),
-	ref_id int	
+	ref_id int,	
+	doc_format int,
+	avatar text
 );
 
 drop table if exists doc_type;
@@ -73,7 +77,11 @@ create table machine (
 	descr text,
 	make text,
 	model text,
-	serialnum text
+	serialnum text,
+	is_running boolean,
+	stopped_at timestamp,
+	started_at timestamp,
+	picture text
 );
 
 drop table if exists component;
@@ -84,7 +92,8 @@ create table component (
 	name text,
 	descr text,
 	make text,
-	model text
+	model text,
+	picture text
 );
 create unique index component_idx on component (machine_id,id);
 
@@ -104,7 +113,8 @@ create table part (
 	reorder_stocklevel numeric(12,2),
 	reorder_qty numeric(12,2),
 	latest_price numeric(12,2),
-	qty_type text
+	qty_type text,
+	picture text
 );
 
 drop table if exists part_vendor;
@@ -138,7 +148,10 @@ create table event (
 	created_by int,
 	allocated_by int,
 	allocated_to int,
-	completed timestamp
+	completed timestamp,
+	labour_cost money,
+	material_cost money,
+	other_cost money
 );
 create index event_site_idx on event (site_id,startdate);
 create index event_allocation_idx on event (allocated_to,id);

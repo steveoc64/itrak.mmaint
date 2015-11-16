@@ -208,12 +208,17 @@
           .state('admin.workorder',{
             url: '/workorder',
             controller: 'workerCtrl',
-            controllerAs: 'ctrl',
+            controllerAs: 'workerCtrl',
             template: '<h3>Work Orders</h> ... tbd'
           })
         .state('worker',{
           url: '/worker',
-          templateUrl: 'templates/worker.html'
+          templateUrl: 'templates/worker.html',
+          controller: 'workerCtrl',
+          controllerAs: 'workerCtrl',
+          animation: {
+            enter: 'slideInRight'
+          }
         })
           .state('worker.dashboard',{
             url: '/dashboard',
@@ -221,15 +226,36 @@
           })
           .state('worker.estop',{
             url: '/estop',
-            template: '<h3>Machine Stoppage !</h> ... tbd'
+            templateUrl: 'templates/worker.estop.html',
+            controller: 'workerStopCtrl',
+            controllerAs: 'workerStopCtrl',
+            resolve: {
+              siteEquip: function(SiteEquipment, loginState) {
+                return SiteEquipment.query({id: loginState.site})
+              }
+            }
           })
           .state('worker.pstop',{
             url: '/pstop',
-            template: '<h3>Preventative Maintenance</h> ... tbd'
+            templateUrl: 'templates/worker.pstop.html',
+            controller: 'workerPStopCtrl',
+            controllerAs: 'workerPStopCtrl',
+            resolve: {
+              siteEquip: function(SiteEquipment, loginState) {
+                return SiteEquipment.query({id: loginState.site})
+              }
+            }
           })
           .state('worker.equip',{
             url: '/equip',
-            template: '<h3>Equipment List</h> ... tbd'
+            templateUrl: 'templates/worker.equip.html',
+            controller: 'workerEquipmentCtrl',
+            controllerAs: 'workerEquipmentCtrl',
+            resolve: {
+              siteEquip: function(SiteEquipment, loginState) {
+                return SiteEquipment.query({id: loginState.site})
+              }
+            }
           })
           .state('worker.task',{
             url: '/task',

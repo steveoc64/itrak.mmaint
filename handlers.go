@@ -51,6 +51,7 @@ func loadHandlers(e *echo.Echo) {
 
 	// Equipment Related functions
 	e.Get("/equipment", getAllEquipment)
+	e.Get("/site_equipment/:id", getAllSiteEquipment)
 	e.Get("/equipment/:id", getEquipment)
 	e.Post("/equipment/:id", saveEquipment)
 	e.Get("/subparts/:id", subParts)
@@ -126,6 +127,8 @@ type loginResponse struct {
 	Username string
 	Role     string
 	Token    string
+	Site     string
+	SiteName string
 }
 
 func login(c *echo.Context) error {
@@ -136,7 +139,11 @@ func login(c *echo.Context) error {
 	}
 	//log.Println("Login Credentials", l)
 
-	sqlResult, _ := SQLMap(db, "select username,role from users where username=$1 and passwd=$2",
+	sqlResult, _ := SQLMap(db,
+		`select u.username,u.role,u.site,s.name as sitename
+		from users u
+			left outer join site s on (s.id=u.site)
+		where u.username=$1 and u.passwd=$2`,
 		l.Username,
 		l.Password)
 	log.Println("SQLResult", sqlResult)
@@ -146,6 +153,8 @@ func login(c *echo.Context) error {
 		r.Username = l.Username
 		r.Role = sqlResult[0]["role"]
 		r.Token = "98023840238402840"
+		r.Site = sqlResult[0]["site"]
+		r.SiteName = sqlResult[0]["sitename"]
 		return c.JSON(http.StatusOK, r)
 	} else {
 		return c.String(http.StatusUnauthorized, "invalid")
@@ -398,6 +407,23 @@ func getAllEquipment(c *echo.Context) error {
 			left outer join equipment p on (p.id=e.parent_id)
 			left outer join site l on (l.id=e.location)
 		order by location_name,e.name`)
+	if err != nil {
+		log.Println(err.Error())
+	}
+	return c.JSON(http.StatusOK, sqlResult)
+}
+
+func getAllSiteEquipment(c *echo.Context) error {
+	id, iderr := strconv.Atoi(c.Param("id"))
+	if iderr != nil {
+		return c.String(http.StatusNotAcceptable, "Invalid ID")
+	}
+	sqlResult, err := SQLMap(db,
+		`select e.*,p.name as parent_name
+		from equipment e 
+		left outer join equipment p on (p.id=e.parent_id)
+		where e.location=$1 and e.parent_id is null
+		order by e.name`, id)
 	if err != nil {
 		log.Println(err.Error())
 	}

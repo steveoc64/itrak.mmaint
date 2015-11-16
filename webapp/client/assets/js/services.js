@@ -54,6 +54,11 @@
     return $resource(ServerName+'/sitetask/:id', {id: '@id'});
   })
 
+  // Site Equipment
+  angular.module('itrak').factory('SiteEquipment', function($resource, ServerName){
+    return $resource(ServerName+'/site_equipment/:id', {id: '@id'});
+  })
+
   // Vendors
   angular.module('itrak').factory('Vendors', function($resource, ServerName){
     return $resource(ServerName+'/vendors/:id');
@@ -68,12 +73,6 @@
   angular.module('itrak').factory('Roles', function($resource, ServerName){
     return $resource(ServerName+'/roles');
   })
-
-  // Vendors
-  angular.module('itrak').factory('CiboLate', function($resource, ServerName){
-    return $resource(ServerName+'/Cibo');
-  })
-
 
 
 })();

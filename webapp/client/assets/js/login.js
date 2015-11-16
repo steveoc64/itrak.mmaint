@@ -26,12 +26,15 @@
       username: '',     
       role: '',
       token: '',
+      site: 0,
+      siteName: '',
       homePage: '',
       menu: [],
       home: function() {
-        console.log('Calling home function for ',this.role)
+        console.log('Calling home function for Role =',this.role)
         switch (this.role) {
           case '1':
+          case 1:
             this.homePage = 'worker'
             this.menu = [
               {sref: "worker.dashboard", title: "Dashboard"},
@@ -42,8 +45,10 @@
               {sref: "worker.spares", title: "Spares"},
               {sref: "worker.reports", title: "Reports"}
             ]
+            console.log('we are here with',this)
             break
           case '3':
+          case 3:
             this.homePage = 'vendor'
             this.menu = [
               {sref: "vendor.dashboard", title: "Dashboard"},
@@ -54,6 +59,7 @@
             ]
             break
           case '2':
+          case 2:
             this.homePage = 'sitemgr'
             this.menu = [
               {sref: "sitemgr.dashboard", title: "Dashboard"},
@@ -67,6 +73,7 @@
             ]
             break
           case '100':
+          case 100:
             this.homePage = 'admin'
             this.menu = [
               {sref: "admin.people", title: "People"},
@@ -84,6 +91,7 @@
             this.homePage = 'login'
             break
         }
+        console.log('advancing to',this.homePage)
         $state.go(this.homePage)
       },
       login: function(username,passwd) { 
@@ -96,7 +104,10 @@
           vm.username = retval.Username
           vm.role = retval.Role
           vm.token = retval.Token
-          console.log('Success',vm)
+          vm.site = retval.Site
+          vm.siteName = retval.SiteName
+          console.log('Success',vm,retval)
+          console.log('Set sitename to ',vm.siteName)
           vm.home()
         },function(){
           console.log('Login Failed')
