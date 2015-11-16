@@ -28,7 +28,20 @@ create table user_role (
 	sitemgr boolean,
 	contractor boolean
 );
-create unique index user_role_idx on user_role (user_id,site_id) ;
+create unique index user_role_idx on user_role (user_id,site_id);
+
+drop table if exists skill;
+create table skill (
+	id serial primary key,
+	name text
+);
+
+drop table if exists user_skill;
+create table user_skill (
+	user_id int,
+	skill_id int
+);
+create unique index user_skill_idx on user_skill (user_id,skill_id);
 
 drop table if exists user_log;
 create table user_log (
